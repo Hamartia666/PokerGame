@@ -1,0 +1,7 @@
+C:\Users\nikok\source\repos\Poker_Game\Server_Communication\bin\Debug\Server_Communication.exe.config
+C:\Users\nikok\source\repos\Poker_Game\Server_Communication\bin\Debug\Server_Communication.exe
+C:\Users\nikok\source\repos\Poker_Game\Server_Communication\bin\Debug\Server_Communication.pdb
+C:\Users\nikok\source\repos\Poker_Game\Server_Communication\obj\Debug\Server_Communication.csprojAssemblyReference.cache
+C:\Users\nikok\source\repos\Poker_Game\Server_Communication\obj\Debug\Server_Communication.csproj.CoreCompileInputs.cache
+C:\Users\nikok\source\repos\Poker_Game\Server_Communication\obj\Debug\Server_Communication.exe
+C:\Users\nikok\source\repos\Poker_Game\Server_Communication\obj\Debug\Server_Communication.pdb
