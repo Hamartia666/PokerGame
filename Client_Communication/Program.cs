@@ -48,7 +48,7 @@ namespace Client_Communication
                     // Establish the remote endpoint for the socket.  
                     // The name of the   
                     // remote device is "host.contoso.com".  
-                    IPHostEntry ipHostInfo = Dns.GetHostEntry("host.contoso.com");
+                    IPHostEntry ipHostInfo = Dns.GetHostEntry("DESKTOP-TMG0V4B");
                     IPAddress ipAddress = ipHostInfo.AddressList[0];
                     IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
