@@ -7,11 +7,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Server_Communication
+namespace PokerGame.Server.Communication
 {
     public class Client
     {
-        public string name = "Client";
+        public Guid Id = Guid.NewGuid();
+        public string Name = "Client";
         public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     }
 }

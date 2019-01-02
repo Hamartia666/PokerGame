@@ -6,19 +6,44 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client_Communication
+namespace PokerGame.Client.Communication
 {
-    public class Communication
+    public class CommunicationHub
     {
         private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private bool _stop = false;
-        public Communication()
+        private IPAddress serverAddress = IPAddress.Loopback;
+
+        public EventHandler OnConnect;
+        public EventHandler<MessageEventArgs> OnMessageReceived;
+
+        private void Connected()
+        {
+            // Make sure someone is listening to event
+            if (OnConnect == null) return;
+            EventArgs args = new EventArgs();
+            OnConnect(this, args);
+        }
+
+        private void MessageReceived(string text)
+        {
+            // Make sure someone is listening to event
+            if (OnMessageReceived == null) return;
+            MessageEventArgs args = new MessageEventArgs(text);
+            OnMessageReceived(this, args);
+        }
+
+        public void Start()
         {
             LoopConnect();
             Task.Run(() => ReceiveLoop());
-            Task.Run(() => SendLoop());
-            while (!_stop)
-            { }
+        }
+
+        public CommunicationHub() { }
+
+        public CommunicationHub(string ipAddress)
+        {
+            serverAddress = IPAddress.Parse(ipAddress);
         }
 
         private void LoopConnect()
@@ -29,7 +54,7 @@ namespace Client_Communication
                 try
                 {
                     attempts++;
-                    _clientSocket.Connect(IPAddress.Loopback, 100);
+                    _clientSocket.Connect(serverAddress, 100);
                 }
                 catch (SocketException)
                 {
@@ -37,18 +62,13 @@ namespace Client_Communication
                     Console.WriteLine("Connection Attempts: " + attempts.ToString());
                 }
             }
-            Console.WriteLine("Connected!");
+            Connected();
         }
 
-        private void SendLoop()
+        public void Send(string textToSend)
         {
-            while (!_stop)
-            {
-                string msg = Console.ReadLine();
-                byte[] buffer = Encoding.ASCII.GetBytes(msg);
-                _clientSocket.Send(buffer);
-            }
-
+            byte[] buffer = Encoding.ASCII.GetBytes(textToSend);
+            _clientSocket.Send(buffer);
         }
 
         private void ReceiveLoop()
@@ -61,13 +81,7 @@ namespace Client_Communication
                     int rec = _clientSocket.Receive(receive_data);
                     byte[] data = new byte[rec];
                     Array.Copy(receive_data, data, rec);
-                    if (Encoding.ASCII.GetString(data).Equals("/quit"))
-                    {
-                        _stop = true;
-                        Release();
-                    }
-
-                    Console.WriteLine("Received: " + Encoding.ASCII.GetString(data));
+                    MessageReceived(Encoding.ASCII.GetString(data));
                 }
                 catch (SocketException e)
                 {
@@ -76,7 +90,7 @@ namespace Client_Communication
             }
         }
 
-        private void Release()
+        public void Release()
         {
             _clientSocket.Shutdown(SocketShutdown.Both);
             _clientSocket.Close();
