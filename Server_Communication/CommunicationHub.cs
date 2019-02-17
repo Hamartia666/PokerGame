@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-
+using PokerGame.Common;
 
 namespace PokerGame.Server.Communication
 {
@@ -16,6 +16,25 @@ namespace PokerGame.Server.Communication
         private static byte[] _buffer = new byte[1024];
         private static Socket _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
+        public EventHandler<ClientEventArgs> OnClientConnect;
+        public EventHandler<MessageEventArgs> OnMessageReceived;
+
+        public void ClientConnected(Client c)
+        {
+            if (OnClientConnect == null) return;
+            ClientEventArgs args = new ClientEventArgs(c);
+            OnClientConnect(this, args);
+        }
+
+        private eCommand MessageReceived(string text)
+        {
+            // Make sure someone is listening to event
+            if (OnMessageReceived == null) return eCommand.quit;
+            MessageEventArgs args = new MessageEventArgs(text);
+            OnMessageReceived(this, args);
+            return args.message.Command;
+        }
+
         public bool ServerSetup()
         {
             return ServerSetup(DEFAULTPORT);
@@ -23,6 +42,7 @@ namespace PokerGame.Server.Communication
 
         public bool ServerSetup(int port)
         {
+            
             try
             {
                 _serverSocket.Bind(new IPEndPoint(IPAddress.Any, port));
@@ -40,19 +60,12 @@ namespace PokerGame.Server.Communication
         {
             Client client = new Client();
             client.socket = _serverSocket.EndAccept(AR);
-            //raise an event client connected and handle in main room
-
-            //_clientSockets.Add(client);
-            //client.name = "Client" + (_clientSockets.IndexOf(client) + 1);
-            //string connect = client.name + " Connected";
-            //Console.WriteLine(client.name + " Connected");
-            //byte[] conn = Encoding.ASCII.GetBytes(connect);
-            //client.socket.BeginSend(conn, 0, conn.Length, SocketFlags.None, new AsyncCallback(SendCallback), client.socket);
+            ClientConnected(client);
             client.socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), client.socket);
             _serverSocket.BeginAccept(new AsyncCallback(AcceptCallback), null);
         }
 
-        private static void ReceiveCallback(IAsyncResult AR)
+        private void ReceiveCallback(IAsyncResult AR)
         {
             //receiving the bullshit            
             Socket socket = (Socket)AR.AsyncState;
@@ -62,70 +75,70 @@ namespace PokerGame.Server.Communication
                 byte[] dataBuff = new byte[received];
                 Array.Copy(_buffer, dataBuff, received);
                 string text = Encoding.ASCII.GetString(dataBuff);
-
-                //raise an event and hanle it in main room
-
-                Console.WriteLine("Text received: " + text);
-
-                if(text.Contains("/"))
-                {
-                    string[] command = text.Split(' ');
-                    string cmd = command[0];
-                    switch (cmd)
-                    {
-                        case "/help":
-                            string send_help = "/name (name) - change your name \n" + "/quit - disconnect from server \n" + "/list - get all clients list \n" + "*(user name) (text) - write a message to a specific user ";
-                            byte[] help = Encoding.ASCII.GetBytes(send_help);
-                            socket.BeginSend(help, 0, help.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
-                            break;
-                        case "/name":
-                            _clientSockets.Find(x => x.socket == socket).name = command[1];
-                            break;
-                        case "/list":
-                            foreach (Client e in _clientSockets)
-                            {
-                                string client_name = e.name;
-                                byte[] name = Encoding.ASCII.GetBytes(client_name);
-                                socket.BeginSend(name, 0, name.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
-                            }
-                            break;
-                        case "/quit":
-                            string quit = "/quit";
-                            byte[] _quit = Encoding.ASCII.GetBytes(quit);
-                            socket.BeginSend(_quit, 0, _quit.Length, SocketFlags.None, new AsyncCallback(SendCallbackQuit), socket);
-                            break;
-                        default:
-                            string no_cmd = "There are no commands like this!";
-                            byte[] no_Cmd = Encoding.ASCII.GetBytes(no_cmd);
-                            socket.BeginSend(no_Cmd, 0, no_Cmd.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
-                            break;
-                    }
-                }
-                else if (text.Contains("*"))
-                {
-                    string[] full_text = text.Split(' ');
-                    string name = full_text[0].Remove(0, 1);
-                    full_text[0] = _clientSockets.Find(x => x.socket == socket).name + " (private):";
-                    string msg = String.Join(" ", full_text);
-                    byte[] _msg = Encoding.ASCII.GetBytes(msg);
-                    Socket receiver = _clientSockets.Find(x => x.name == name).socket;
-                    receiver.BeginSend(_msg, 0, _msg.Length, SocketFlags.None, new AsyncCallback(SendCallback), receiver);
-                }
-                else
-                {
-                    //throwing the bullshit back at the clients
-                    byte[] data = Encoding.ASCII.GetBytes(text);
-                    _clientSockets.ForEach((client) => { if (client.socket != socket) { client.socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), client.socket); } });
-                }
-                if (!text.Equals("/quit"))
+                if (MessageReceived(text) != eCommand.quit)
                 {
                     //start receiving again
                     socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
                 }
-                
+                //raise an event and hanle it in main room
+
+                //Console.WriteLine("Text received: " + text);
+
+                //if(text.Contains("/"))
+                //{
+                //    string[] command = text.Split(' ');
+                //    string cmd = command[0];
+                //    switch (cmd)
+                //    {
+                //        case "/help":
+                //            string send_help = "/name (name) - change your name \n" + "/quit - disconnect from server \n" + "/list - get all clients list \n" + "*(user name) (text) - write a message to a specific user ";
+                //            byte[] help = Encoding.ASCII.GetBytes(send_help);
+                //            socket.BeginSend(help, 0, help.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
+                //            break;
+                //        case "/name":
+                //            _clientSockets.Find(x => x.socket == socket).name = command[1];
+                //            break;
+                //        case "/list":
+                //            foreach (Client e in _clientSockets)
+                //            {
+                //                string client_name = e.name;
+                //                byte[] name = Encoding.ASCII.GetBytes(client_name);
+                //                socket.BeginSend(name, 0, name.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
+                //            }
+                //            break;
+                //        case "/quit":
+                //            string quit = "/quit";
+                //            byte[] _quit = Encoding.ASCII.GetBytes(quit);
+                //            socket.BeginSend(_quit, 0, _quit.Length, SocketFlags.None, new AsyncCallback(SendCallbackQuit), socket);
+                //            break;
+                //        default:
+                //            string no_cmd = "There are no commands like this!";
+                //            byte[] no_Cmd = Encoding.ASCII.GetBytes(no_cmd);
+                //            socket.BeginSend(no_Cmd, 0, no_Cmd.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
+                //            break;
+                //    }
+                //}
+                //else if (text.Contains("*"))
+                //{
+                //    string[] full_text = text.Split(' ');
+                //    string name = full_text[0].Remove(0, 1);
+                //    full_text[0] = _clientSockets.Find(x => x.socket == socket).name + " (private):";
+                //    string msg = String.Join(" ", full_text);
+                //    byte[] _msg = Encoding.ASCII.GetBytes(msg);
+                //    Socket receiver = _clientSockets.Find(x => x.name == name).socket;
+                //    receiver.BeginSend(_msg, 0, _msg.Length, SocketFlags.None, new AsyncCallback(SendCallback), receiver);
+                //}
+                //else
+                //{
+                //    //throwing the bullshit back at the clients
+                //    byte[] data = Encoding.ASCII.GetBytes(text);
+                //    _clientSockets.ForEach((client) => { if (client.socket != socket) { client.socket.BeginSend(data, 0, data.Length, SocketFlags.None, new AsyncCallback(SendCallback), client.socket); } });
+                //}
+
+
 
             }
-            catch (SocketException ex)
+            catch (SocketException)
             {
                 Release(socket);
             }

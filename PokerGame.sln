@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Console", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Common", "PokerGame.Common\PokerGame.Common.csproj", "{BE752BF6-EA9E-4940-A930-24350C58603D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Game", "Server\Game\PokerGame.Server.Game\PokerGame.Server.Game.csproj", "{7085ACF8-4229-4ABC-9237-65C005783B27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{BE752BF6-EA9E-4940-A930-24350C58603D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE752BF6-EA9E-4940-A930-24350C58603D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE752BF6-EA9E-4940-A930-24350C58603D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7085ACF8-4229-4ABC-9237-65C005783B27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7085ACF8-4229-4ABC-9237-65C005783B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7085ACF8-4229-4ABC-9237-65C005783B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7085ACF8-4229-4ABC-9237-65C005783B27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{32F825D2-3639-471F-A35F-35C2D6B83849} = {7F6B384B-91E2-4124-A0FA-79FE17AF8CE3}
 		{F2B736FB-4FB7-4A03-A98C-084B09C9F36F} = {7F6B384B-91E2-4124-A0FA-79FE17AF8CE3}
 		{BE752BF6-EA9E-4940-A930-24350C58603D} = {C4DAE3F0-661C-4AD2-A60F-039D7C9E33B3}
+		{7085ACF8-4229-4ABC-9237-65C005783B27} = {7F6B384B-91E2-4124-A0FA-79FE17AF8CE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {30D35A5B-98DB-4010-AEB1-A47251459E7F}

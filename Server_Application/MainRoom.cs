@@ -9,41 +9,26 @@ using System.Threading.Tasks;
 
 namespace PokerGame.Server.Application
 {
-    public class MainRoom : IServerRoom, IMainRoom
+    public class MainRoom : RoomBase, IMainRoom
     {
-        private List<Client> _clients;
         private List<IServerRoom> _rooms;
         private CommunicationHub _hub;
-        private readonly IOutput _output;
 
-        public Guid Id { get; }
-
-        public MainRoom(IOutput output)
+        public MainRoom(IOutput output) : base(output)
         {
-            Id = Guid.NewGuid();
-            _output = output;
+            _rooms = new List<IServerRoom>
+            {
+                this
+            };
         }
 
-        public bool Connect(Client client)
+        public void Connect(object sender, ClientEventArgs args)
         {
-            //metoda do onConnect
-
-            //dodaj klienta zrwoconego przez event do listy
-
-            //wypisz na konsoli ze ktos sie polaczyl
-
+            var client = args.Client;
+            client.Name += (_clients.Count + 1).ToString();
+            _clients.Add(client);            
+            _output.Write(client.Name + " has connected!");
             //wywwolaj metode send message(room)
-            throw new NotImplementedException();
-        }
-
-        public bool SendMessage(IServerRoom room)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SendMessage(Client client)
-        {
-            throw new NotImplementedException();
         }
 
         public bool StartServer(int port)
@@ -52,6 +37,8 @@ namespace PokerGame.Server.Application
             if (_hub.ServerSetup(port))
             {
                 _output.Write("Server started!");
+                _hub.OnClientConnect += Connect;
+                _hub.OnMessageReceived += ReceiveMessage;
                 return true;
             }
             else
@@ -61,9 +48,14 @@ namespace PokerGame.Server.Application
             }
         }
 
-        public void ReceiveMessage(IMessage message)
+        public void ReceiveMessage(object sender, MessageEventArgs args)
         {
-            //
+            _rooms.FirstOrDefault(x => x.Id == args.message.RoomId).ProcessMessage(args.message);
+        }
+
+        public override void ProcessMessage(IMessage message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

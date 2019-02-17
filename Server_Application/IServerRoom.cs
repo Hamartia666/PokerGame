@@ -7,8 +7,8 @@ namespace PokerGame.Server.Application
     public interface IServerRoom
     {
         Guid Id { get; }
-        bool SendMessage(IServerRoom room);
+        bool SendMessage();
         bool SendMessage(Client client);
-        void ReceiveMessage(IMessage message);
+        void ProcessMessage(IMessage message);
     }
 }

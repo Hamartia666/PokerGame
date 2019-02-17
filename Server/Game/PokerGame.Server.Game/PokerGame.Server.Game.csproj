@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BE752BF6-EA9E-4940-A930-24350C58603D}</ProjectGuid>
+    <ProjectGuid>{7085ACF8-4229-4ABC-9237-65C005783B27}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PokerGame.Common</RootNamespace>
-    <AssemblyName>PokerGame.Common</AssemblyName>
+    <RootNamespace>PokerGame.Server.Game</RootNamespace>
+    <AssemblyName>PokerGame.Server.Game</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,15 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Card.cs" />
-    <Compile Include="eValue.cs" />
-    <Compile Include="eCommand.cs" />
-    <Compile Include="eSuit.cs" />
-    <Compile Include="IMessage.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="MessageEventArgs.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="GameEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\PokerGame.Common\PokerGame.Common.csproj">
+      <Project>{BE752BF6-EA9E-4940-A930-24350C58603D}</Project>
+      <Name>PokerGame.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

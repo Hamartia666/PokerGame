@@ -22,7 +22,7 @@ namespace PokerGame.Client.Forms
         private void Send()
         {
             string msg = InputTxt.Text;
-            commChannel.Send(msg);
+            commChannel.SendText(msg);
             InputTxt.Clear();
             //byte[] buffer = Encoding.ASCII.GetBytes(msg);
             //_clientSocket.Send(buffer);
@@ -44,8 +44,8 @@ namespace PokerGame.Client.Forms
 
         private void DisplayReceivedMessage(object sender, MessageEventArgs e)
         {
-            if (e.command == eCommand.txt)
-                AppendToChatBox(e.message);
+            if (e.message.Command == eCommand.txt)
+                AppendToChatBox(e.message.Body);
             else
             {
                 Close();

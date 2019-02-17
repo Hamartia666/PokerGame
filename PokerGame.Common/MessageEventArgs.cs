@@ -13,8 +13,7 @@ namespace PokerGame.Common
         
         public MessageEventArgs(string text)
         {
-            command = text.Equals("/quit") == true ? eCommand.quit : eCommand.txt;
-            message = text;
+            message = new Message(text);
         }
     }
 }

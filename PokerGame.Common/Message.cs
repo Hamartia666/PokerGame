@@ -18,9 +18,20 @@ namespace PokerGame.Common
 
         public Message(string text)
         {
-            //
             var parts = text.Split('|');
-            Command = parts[0] == "dupa" ? eCommand.quit : eCommand.txt;
+            Command = ParseCommand(parts[0]);
+            Body = parts[1];
+        }
+
+        private eCommand ParseCommand(string s)
+        {
+            switch (s)
+            {
+                case "q":
+                    return eCommand.quit;
+                default:
+                    return eCommand.txt;
+            }
         }
 
         public override string ToString()

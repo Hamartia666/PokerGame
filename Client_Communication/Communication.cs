@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PokerGame.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -65,6 +66,12 @@ namespace PokerGame.Client.Communication
             Connected();
         }
 
+        public void SendText(string textToSend)
+        {
+            byte[] buffer = Encoding.ASCII.GetBytes("t|"+textToSend);
+            _clientSocket.Send(buffer);
+        }
+
         public void Send(string textToSend)
         {
             byte[] buffer = Encoding.ASCII.GetBytes(textToSend);
@@ -83,7 +90,7 @@ namespace PokerGame.Client.Communication
                     Array.Copy(receive_data, data, rec);
                     MessageReceived(Encoding.ASCII.GetString(data));
                 }
-                catch (SocketException e)
+                catch (SocketException)
                 {
                     Release();
                 }
