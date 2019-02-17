@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using PokerGame.Common;
 using PokerGame.Server.Communication;
-using PokerGame.Server.Console;
 using PokerGame.Server.Game;
 
 namespace PokerGame.Server.Application

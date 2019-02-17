@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PokerGame.Server.Console
+namespace PokerGame.Server.Application
 {
     public interface IOutput
     {

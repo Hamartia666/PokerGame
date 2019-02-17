@@ -8,6 +8,8 @@ namespace PokerGame.Common
 {
     public enum eCommand
     {
-        txt, quit
+        txt,
+        quit,
+        info
     }
 }

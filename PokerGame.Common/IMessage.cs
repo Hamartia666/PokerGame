@@ -7,7 +7,7 @@ namespace PokerGame.Common
     {
         string Body { get; }
         eCommand Command { get; }
-        Guid ClientId { get; }
+        Guid? ClientId { get; }
         Guid RoomId { get; }
     }
 }

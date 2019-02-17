@@ -1,6 +1,5 @@
 ﻿using PokerGame.Common;
 using PokerGame.Server.Communication;
-using PokerGame.Server.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +27,8 @@ namespace PokerGame.Server.Application
             client.Name += (_clients.Count + 1).ToString();
             _clients.Add(client);            
             _output.Write(client.Name + " has connected!");
-            //wywwolaj metode send message(room)
+            SendMessage(client, new Message(eCommand.info, Id, client.Id, ""));
+            SendMessage(new Message(eCommand.txt, Id, null, $"{client.Name} has connected"), client);
         }
 
         public bool StartServer(int port)
@@ -55,7 +55,19 @@ namespace PokerGame.Server.Application
 
         public override void ProcessMessage(IMessage message)
         {
-            throw new NotImplementedException();
+            switch (message.Command)
+            {
+                case eCommand.quit:
+                    //zamknac socket
+                    var client = _clients.First(x => x.Id == message.ClientId);
+                    client.Release();
+                    _clients.Remove(client);
+                    SendMessage(new Message(eCommand.txt, Id, null, $"{client.Name} has disconnected"));
+                    break;
+                case eCommand.txt:
+                    SendMessage(new Message(eCommand.txt, Id, null, $"{_clients.First(x => x.Id == message.ClientId).Name}: {message.Body}"));
+                    break;
+            }
         }
     }
 }

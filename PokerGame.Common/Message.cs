@@ -12,7 +12,7 @@ namespace PokerGame.Common
 
         public eCommand Command { get; }
 
-        public Guid ClientId { get; }
+        public Guid? ClientId { get; }
 
         public Guid RoomId { get; }
 
@@ -20,15 +20,36 @@ namespace PokerGame.Common
         {
             var parts = text.Split('|');
             Command = ParseCommand(parts[0]);
-            Body = parts[1];
+            RoomId = Guid.Parse(parts[1]);
+            ClientId = ParseClientGuid(parts[2]);
+            Body = parts[3];
+        }
+
+        private Guid? ParseClientGuid(string v)
+        {
+            Guid g = new Guid();
+            if (Guid.TryParse(v, out g))
+                return g;
+            else
+                return null;
+        }
+
+        public Message(eCommand command, Guid roomId, Guid? clientId, string body)
+        {
+            Command = command;
+            RoomId = roomId;
+            ClientId = clientId;
+            Body = body;
         }
 
         private eCommand ParseCommand(string s)
         {
             switch (s)
             {
-                case "q":
+                case "quit":
                     return eCommand.quit;
+                case "info":
+                    return eCommand.info;
                 default:
                     return eCommand.txt;
             }
@@ -36,8 +57,8 @@ namespace PokerGame.Common
 
         public override string ToString()
         {
-            //todo
-            return base.ToString();
+            string s = $"{Command}|{RoomId}|{ClientId}|{Body}";
+            return s;
         }
     }
 }

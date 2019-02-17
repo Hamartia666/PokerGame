@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="GameRoom.cs" />
     <Compile Include="IMainRoom.cs" />
+    <Compile Include="IOutput.cs" />
     <Compile Include="IServerRoom.cs" />
     <Compile Include="MainRoom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,10 +61,6 @@
     <ProjectReference Include="..\Server_Communication\PokerGame.Server.Communication.csproj">
       <Project>{CC11B0EE-7BED-4ACC-BC4C-DA56C7C5BC07}</Project>
       <Name>PokerGame.Server.Communication</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Server_Console\PokerGame.Server.Console.csproj">
-      <Project>{F2B736FB-4FB7-4A03-A98C-084B09C9F36F}</Project>
-      <Name>PokerGame.Server.Console</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

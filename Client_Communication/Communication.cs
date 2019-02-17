@@ -59,22 +59,14 @@ namespace PokerGame.Client.Communication
                 }
                 catch (SocketException)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Connection Attempts: " + attempts.ToString());
-                }
+                }                
             }
             Connected();
-        }
+        }       
 
-        public void SendText(string textToSend)
+        public void Send(IMessage message)
         {
-            byte[] buffer = Encoding.ASCII.GetBytes("t|"+textToSend);
-            _clientSocket.Send(buffer);
-        }
-
-        public void Send(string textToSend)
-        {
-            byte[] buffer = Encoding.ASCII.GetBytes(textToSend);
+            byte[] buffer = Encoding.ASCII.GetBytes(message.ToString());
             _clientSocket.Send(buffer);
         }
 

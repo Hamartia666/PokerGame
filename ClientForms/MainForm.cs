@@ -18,11 +18,12 @@ namespace PokerGame.Client.Forms
     public partial class MainForm : Form
     {
         CommunicationHub commChannel;
+        Guid RoomId;
+        Guid ClientId;
         
         private void Send()
         {
-            string msg = InputTxt.Text;
-            commChannel.SendText(msg);
+            commChannel.Send(new Common.Message(eCommand.txt, RoomId, ClientId, InputTxt.Text));
             InputTxt.Clear();
             //byte[] buffer = Encoding.ASCII.GetBytes(msg);
             //_clientSocket.Send(buffer);
@@ -44,11 +45,18 @@ namespace PokerGame.Client.Forms
 
         private void DisplayReceivedMessage(object sender, MessageEventArgs e)
         {
-            if (e.message.Command == eCommand.txt)
-                AppendToChatBox(e.message.Body);
-            else
+            switch (e.message.Command)
             {
-                Close();
+                case eCommand.txt:
+                    AppendToChatBox(e.message.Body);
+                    break;
+                case eCommand.info:
+                    RoomId = e.message.RoomId;
+                    ClientId = e.message.ClientId.Value;
+                    break;
+                default:
+                    Close();
+                    break;
             }
         }
 

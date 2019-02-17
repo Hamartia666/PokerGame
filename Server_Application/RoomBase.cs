@@ -1,6 +1,5 @@
 ﻿using PokerGame.Common;
 using PokerGame.Server.Communication;
-using PokerGame.Server.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +21,20 @@ namespace PokerGame.Server.Application
             _clients = new List<Client>();
         }
 
-        public bool SendMessage()
+        public void SendMessage(IMessage message)
         {
-            _clients.Where
+            foreach (var c in _clients)
+                SendMessage(c, message);
         }
 
-        public bool SendMessage(Client client)
+        public void SendMessage(IMessage message, Client notThisClient)
         {
-            throw new NotImplementedException();
+            _clients.Where(x => x != notThisClient).ToList().ForEach(x => x.Send(message));
+        }
+
+        public void SendMessage(Client client, IMessage message)
+        {
+            client.Send(message);
         }
 
         public virtual void ProcessMessage(IMessage message)
