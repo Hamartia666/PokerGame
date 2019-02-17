@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CC11B0EE-7BED-4ACC-BC4C-DA56C7C5BC07}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>PokerGame.Server.Communication</RootNamespace>
-    <AssemblyName>PokerGame.Server.Communication</AssemblyName>
+    <ProjectGuid>{F2B736FB-4FB7-4A03-A98C-084B09C9F36F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PokerGame.Server.Console</RootNamespace>
+    <AssemblyName>PokerGame.Server.Console</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,9 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,18 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="ClientEventArgs.cs" />
-    <Compile Include="CommunicationHub.cs" />
+    <Compile Include="Output.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PokerGame.Common\PokerGame.Common.csproj">
-      <Project>{BE752BF6-EA9E-4940-A930-24350C58603D}</Project>
-      <Name>PokerGame.Common</Name>
+    <ProjectReference Include="..\PokerGame.Server.Application\PokerGame.Server.Application.csproj">
+      <Project>{32f825d2-3639-471f-a35f-35c2d6b83849}</Project>
+      <Name>PokerGame.Server.Application</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

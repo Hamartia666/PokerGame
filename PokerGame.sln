@@ -7,21 +7,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{2356DC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{7F6B384B-91E2-4124-A0FA-79FE17AF8CE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Client.Communication", "Client_Communication\PokerGame.Client.Communication.csproj", "{5EF958DC-E78C-4A03-8066-50B8902293CD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Communication", "Server_Communication\PokerGame.Server.Communication.csproj", "{CC11B0EE-7BED-4ACC-BC4C-DA56C7C5BC07}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Client.Forms", "ClientForms\PokerGame.Client.Forms.csproj", "{AAA22540-85DC-48FE-911B-72E67DA678B1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C4DAE3F0-661C-4AD2-A60F-039D7C9E33B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Application", "Server_Application\PokerGame.Server.Application.csproj", "{32F825D2-3639-471F-A35F-35C2D6B83849}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Client.Communication", "Client\PokerGame.Client.Communication\PokerGame.Client.Communication.csproj", "{5EF958DC-E78C-4A03-8066-50B8902293CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Console", "Server_Console\PokerGame.Server.Console.csproj", "{F2B736FB-4FB7-4A03-A98C-084B09C9F36F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Communication", "Server\PokerGame.Server.Communication\PokerGame.Server.Communication.csproj", "{CC11B0EE-7BED-4ACC-BC4C-DA56C7C5BC07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Common", "PokerGame.Common\PokerGame.Common.csproj", "{BE752BF6-EA9E-4940-A930-24350C58603D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Client.Forms", "Client\PokerGame.Client.Forms\PokerGame.Client.Forms.csproj", "{AAA22540-85DC-48FE-911B-72E67DA678B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Game", "Server\Game\PokerGame.Server.Game\PokerGame.Server.Game.csproj", "{7085ACF8-4229-4ABC-9237-65C005783B27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Application", "Server\PokerGame.Server.Application\PokerGame.Server.Application.csproj", "{32F825D2-3639-471F-A35F-35C2D6B83849}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Console", "Server\PokerGame.Server.Console\PokerGame.Server.Console.csproj", "{F2B736FB-4FB7-4A03-A98C-084B09C9F36F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Common", "Common\PokerGame.Common\PokerGame.Common.csproj", "{BE752BF6-EA9E-4940-A930-24350C58603D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerGame.Server.Game", "Server\PokerGame.Server.Game\PokerGame.Server.Game.csproj", "{7085ACF8-4229-4ABC-9237-65C005783B27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
