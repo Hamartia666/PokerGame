@@ -10,13 +10,11 @@ using System.Windows.Forms;
 
 namespace PokerGame.Client.Forms
 {
-    public partial class ChatRoom : PokerGame.Client.Forms.MainForm
+    public partial class GameRoom : Form
     {
-        public ChatRoom()
+        public GameRoom()
         {
             InitializeComponent();
         }
-
-
     }
 }

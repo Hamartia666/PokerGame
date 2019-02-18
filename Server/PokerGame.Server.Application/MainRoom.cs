@@ -15,6 +15,7 @@ namespace PokerGame.Server.Application
 
         public MainRoom(IOutput output) : base(output)
         {
+            roomName = "Main Room";
             _rooms = new List<IServerRoom>
             {
                 this
@@ -29,6 +30,8 @@ namespace PokerGame.Server.Application
             _output.Write(client.Name + " has connected!");
             SendMessage(client, new Message(eCommand.info, Id, client.Id, ""));
             SendMessage(new Message(eCommand.txt, Id, null, $"{client.Name} has connected"), client);
+            SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
+            SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", _rooms.Select(x => x.roomName))));
         }
 
         public bool StartServer(int port)
@@ -50,7 +53,10 @@ namespace PokerGame.Server.Application
 
         public void ReceiveMessage(object sender, MessageEventArgs args)
         {
-            _rooms.FirstOrDefault(x => x.Id == args.message.RoomId).ProcessMessage(args.message);
+            foreach (var msg in args.messages)
+            {
+                _rooms.FirstOrDefault(x => x.Id == msg.RoomId).ProcessMessage(msg);
+            }
         }
 
         public override void ProcessMessage(IMessage message)
@@ -63,6 +69,22 @@ namespace PokerGame.Server.Application
                     client.Release();
                     _clients.Remove(client);
                     SendMessage(new Message(eCommand.txt, Id, null, $"{client.Name} has disconnected"));
+                    SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
+                    break;
+                case eCommand.changeName:
+                    var c = _clients.First(x => x.Id == message.ClientId).Name;
+                    _clients.First(x => x.Id == message.ClientId).Name = message.Body;
+                    SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
+                    SendMessage(new Message(eCommand.txt, Id, null, $"{c} has changed his name to {_clients.First(x => x.Id == message.ClientId).Name}"));
+                    break;
+                case eCommand.createRoom:
+                    var gameRoom = new GameRoom(_output);
+                    gameRoom.roomName = $"Room {_rooms.Count}";
+                    _rooms.Add(gameRoom);
+                    SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", _rooms.Select(x => x.roomName))));
+                    SendMessage(new Message(eCommand.txt, Id, null, $"{_clients.First(x => x.Id == message.ClientId).Name} has created {gameRoom.roomName}"));
+                    break;
+                case eCommand.joinRoom:
                     break;
                 case eCommand.txt:
                     SendMessage(new Message(eCommand.txt, Id, null, $"{_clients.First(x => x.Id == message.ClientId).Name}: {message.Body}"));

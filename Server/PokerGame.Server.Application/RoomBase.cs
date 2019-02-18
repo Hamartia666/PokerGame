@@ -10,6 +10,7 @@ namespace PokerGame.Server.Application
 {
     public class RoomBase : IServerRoom
     {
+        public string roomName { get; set; }
         public Guid Id { get; }
         protected List<Client> _clients;
         protected readonly IOutput _output;

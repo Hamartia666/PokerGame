@@ -6,6 +6,7 @@ namespace PokerGame.Server.Application
 {
     public interface IServerRoom
     {
+        string roomName { get; set; }
         Guid Id { get; }
         void SendMessage(IMessage message);
         void SendMessage(Client client, IMessage message);

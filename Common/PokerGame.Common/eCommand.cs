@@ -10,6 +10,11 @@ namespace PokerGame.Common
     {
         txt,
         quit,
-        info
+        info,
+        list,
+        changeName,
+        createRoom,
+        joinRoom,
+        listRoom,
     }
 }

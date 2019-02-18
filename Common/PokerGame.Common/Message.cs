@@ -16,6 +16,8 @@ namespace PokerGame.Common
 
         public Guid RoomId { get; }
 
+        public static char END_MESSAGE = '$';
+
         public Message(string text)
         {
             var parts = text.Split('|');
@@ -50,6 +52,16 @@ namespace PokerGame.Common
                     return eCommand.quit;
                 case "info":
                     return eCommand.info;
+                case "list":
+                    return eCommand.list;
+                case "changeName":
+                    return eCommand.changeName;
+                case "createRoom":
+                    return eCommand.createRoom;
+                case "joinRoom":
+                    return eCommand.joinRoom;
+                case "listRoom":
+                    return eCommand.listRoom;
                 default:
                     return eCommand.txt;
             }
@@ -57,7 +69,7 @@ namespace PokerGame.Common
 
         public override string ToString()
         {
-            string s = $"{Command}|{RoomId}|{ClientId}|{Body}";
+            string s = $"{Command}|{RoomId}|{ClientId}|{Body}{END_MESSAGE}";
             return s;
         }
     }

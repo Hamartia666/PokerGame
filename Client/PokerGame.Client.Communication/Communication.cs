@@ -91,8 +91,17 @@ namespace PokerGame.Client.Communication
 
         public void Release()
         {
-            _clientSocket.Shutdown(SocketShutdown.Both);
-            _clientSocket.Close();
+            try
+            {
+                if (_clientSocket == null)
+                    return;
+                _clientSocket.Shutdown(SocketShutdown.Both);
+                _clientSocket.Close();
+            }
+            catch (SocketException)
+            {
+
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace PokerGame.Client.Forms
 {
-    partial class ChatRoom
+    partial class GameRoom
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // GameRoom
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "ChatRoom";
+            this.ClientSize = new System.Drawing.Size(1013, 554);
+            this.Name = "GameRoom";
+            this.Text = "GameRoom";
+            this.ResumeLayout(false);
+
         }
 
         #endregion

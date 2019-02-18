@@ -26,13 +26,13 @@ namespace PokerGame.Server.Communication
             OnClientConnect(this, args);
         }
 
-        private eCommand MessageReceived(string text)
+        private bool MessageReceived(string text)
         {
             // Make sure someone is listening to event
-            if (OnMessageReceived == null) return eCommand.quit;
+            if (OnMessageReceived == null) return true;
             MessageEventArgs args = new MessageEventArgs(text);
             OnMessageReceived(this, args);
-            return args.message.Command;
+            return args.messages.Where(x=>x.Command == eCommand.quit).Any();
         }
 
         public bool ServerSetup()
@@ -75,7 +75,7 @@ namespace PokerGame.Server.Communication
                 byte[] dataBuff = new byte[received];
                 Array.Copy(_buffer, dataBuff, received);
                 string text = Encoding.ASCII.GetString(dataBuff);
-                if (MessageReceived(text) != eCommand.quit)
+                if (!MessageReceived(text))
                 {
                     //start receiving again
                     socket.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
