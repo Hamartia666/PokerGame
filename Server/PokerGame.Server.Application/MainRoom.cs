@@ -31,7 +31,7 @@ namespace PokerGame.Server.Application
             SendMessage(client, new Message(eCommand.info, Id, client.Id, ""));
             SendMessage(new Message(eCommand.txt, Id, null, $"{client.Name} has connected"), client);
             SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
-            SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", _rooms.Select(x => x.roomName))));
+            SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", $"{_rooms.Select(x => x.roomName)}|{_rooms.Select(x => x.Id)}")));
         }
 
         public bool StartServer(int port)
@@ -81,10 +81,12 @@ namespace PokerGame.Server.Application
                     var gameRoom = new GameRoom(_output);
                     gameRoom.roomName = $"Room {_rooms.Count}";
                     _rooms.Add(gameRoom);
-                    SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", _rooms.Select(x => x.roomName))));
+                    SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", $"{_rooms.Select(x => x.roomName)}|{_rooms.Select(x => x.Id)}")));
                     SendMessage(new Message(eCommand.txt, Id, null, $"{_clients.First(x => x.Id == message.ClientId).Name} has created {gameRoom.roomName}"));
                     break;
                 case eCommand.joinRoom:
+                    _rooms.First(x => x.Id == Guid.Parse(message.Body)).AddClient(_clients.First(x => x.Id == message.ClientId));
+
                     break;
                 case eCommand.txt:
                     SendMessage(new Message(eCommand.txt, Id, null, $"{_clients.First(x => x.Id == message.ClientId).Name}: {message.Body}"));

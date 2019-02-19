@@ -20,6 +20,8 @@ namespace PokerGame.Client.Forms
         CommunicationHub commChannel;
         Guid RoomId;
         Guid ClientId;
+        Dictionary<Guid, Form> _rooms;
+        Dictionary<Guid, string> _roomList;
 
         
         
@@ -47,7 +49,9 @@ namespace PokerGame.Client.Forms
 
         public MainForm()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            _rooms = new Dictionary<Guid, Form>();
+            _roomList = new Dictionary<Guid, string>();
         }
 
         private void DisplayReceivedMessage(object sender, MessageEventArgs e)
@@ -78,10 +82,16 @@ namespace PokerGame.Client.Forms
 
         private void UpdateRoomList(string body)
         {
+            var c = body.Split(',');
+            foreach (var e in c)
+            {
+                var b = e.Split('|');
+                _roomList.Add(Guid.Parse(b[0]), b[1]);
+            }
             MethodInvoker invoker = new MethodInvoker(delegate
             {
                 RoomList.Items.Clear();
-                RoomList.Items.AddRange(body.Split(','));
+                RoomList.Items.AddRange(_roomList.Values.ToArray());
             });
             this.Invoke(invoker);
         }
@@ -131,6 +141,15 @@ namespace PokerGame.Client.Forms
         private void CreateRoomBtn_Click(object sender, EventArgs e)
         {
             commChannel.Send(new Common.Message(eCommand.createRoom, RoomId, ClientId, ""));
+        }
+
+        private void JoinRoomBtn_Click(object sender, EventArgs e)
+        {
+            var a = _roomList.First(x => x.Value == RoomList.SelectedItem.ToString()).Key;
+            commChannel.Send(new Common.Message(eCommand.joinRoom, RoomId, ClientId, $"{a}"));
+            var c = new GameRoom();
+            _rooms.Add(a, c);
+            c.Show();
         }
     }
 }

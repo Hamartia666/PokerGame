@@ -11,5 +11,6 @@ namespace PokerGame.Server.Application
         void SendMessage(IMessage message);
         void SendMessage(Client client, IMessage message);
         void ProcessMessage(IMessage message);
+        void AddClient(Client c);
     }
 }

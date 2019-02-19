@@ -38,6 +38,11 @@ namespace PokerGame.Server.Application
             client.Send(message);
         }
 
+        public void AddClient(Client c)
+        {
+            _clients.Add(c);
+        }
+
         public virtual void ProcessMessage(IMessage message)
         { }
     }
