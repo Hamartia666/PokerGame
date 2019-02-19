@@ -15,12 +15,13 @@ using PokerGame.Common;
 
 namespace PokerGame.Client.Forms
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IProcessMessage
     {
-        CommunicationHub commChannel;
+        private CommunicationHub commChannel;
+        public CommunicationHub CommChannel { get { return commChannel; } }
         Guid RoomId;
         Guid ClientId;
-        Dictionary<Guid, Form> _rooms;
+        Dictionary<Guid, IProcessMessage> _rooms;
         Dictionary<Guid, string> _roomList;
 
         
@@ -50,42 +51,53 @@ namespace PokerGame.Client.Forms
         public MainForm()
         {
             InitializeComponent();
-            _rooms = new Dictionary<Guid, Form>();
+            _rooms = new Dictionary<Guid, IProcessMessage>();
             _roomList = new Dictionary<Guid, string>();
         }
 
-        private void DisplayReceivedMessage(object sender, MessageEventArgs e)
+        private void ProcessMessages(object sender, MessageEventArgs e)
         {
             foreach (var msg in e.messages)
             {
-                switch (msg.Command)
-                {
-                    case eCommand.txt:
-                        AppendToChatBox(msg.Body);
-                        break;
-                    case eCommand.info:
-                        RoomId = msg.RoomId;
-                        ClientId = msg.ClientId.Value;
-                        break;
-                    case eCommand.list:
-                        UpdateClientList(msg.Body);
-                        break;
-                    case eCommand.listRoom:
-                        UpdateRoomList(msg.Body);
-                        break;
-                    default:
-                        Close();
-                        break;
-                }
+                //pierwze polaczenie
+                if (_rooms.Any())
+                    _rooms.First(x => x.Key == msg.RoomId).Value.ProcessMessage(msg);
+                else
+                    ProcessMessage(msg);
+            }
+        }
+
+        public void ProcessMessage(IMessage msg)
+        {
+            switch (msg.Command)
+            {
+                case eCommand.txt:
+                    AppendToChatBox(msg.Body);
+                    break;
+                case eCommand.info:
+                    RoomId = msg.RoomId;
+                    _rooms.Add(RoomId, this);
+                    ClientId = msg.ClientId.Value;
+                    break;
+                case eCommand.list:
+                    UpdateClientList(msg.Body);
+                    break;
+                case eCommand.listRoom:
+                    UpdateRoomList(msg.Body);
+                    break;
+                default:
+                    Close();
+                    break;
             }
         }
 
         private void UpdateRoomList(string body)
         {
+            _roomList.Clear();
             var c = body.Split(',');
             foreach (var e in c)
             {
-                var b = e.Split('|');
+                var b = e.Split('%');
                 _roomList.Add(Guid.Parse(b[0]), b[1]);
             }
             MethodInvoker invoker = new MethodInvoker(delegate
@@ -116,7 +128,7 @@ namespace PokerGame.Client.Forms
             //Show();
             commChannel = new CommunicationHub();
             commChannel.OnConnect += DisplayConnectedMesage;
-            commChannel.OnMessageReceived += DisplayReceivedMessage;
+            commChannel.OnMessageReceived += ProcessMessages;
             commChannel.Start();
         }
 
@@ -147,7 +159,7 @@ namespace PokerGame.Client.Forms
         {
             var a = _roomList.First(x => x.Value == RoomList.SelectedItem.ToString()).Key;
             commChannel.Send(new Common.Message(eCommand.joinRoom, RoomId, ClientId, $"{a}"));
-            var c = new GameRoom();
+            var c = new GameRoom(this);
             _rooms.Add(a, c);
             c.Show();
         }

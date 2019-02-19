@@ -28,13 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.ClientList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
+            // 
+            // ClientList
+            // 
+            this.ClientList.FormattingEnabled = true;
+            this.ClientList.Location = new System.Drawing.Point(463, 53);
+            this.ClientList.Name = "ClientList";
+            this.ClientList.Size = new System.Drawing.Size(120, 95);
+            this.ClientList.TabIndex = 0;
             // 
             // GameRoom
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1013, 554);
+            this.ClientSize = new System.Drawing.Size(760, 450);
+            this.Controls.Add(this.ClientList);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "GameRoom";
             this.Text = "GameRoom";
             this.ResumeLayout(false);
@@ -42,5 +53,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.ListBox ClientList;
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="GameRoom.Designer.cs">
       <DependentUpon>GameRoom.cs</DependentUpon>
     </Compile>
+    <Compile Include="IProcessMessage.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
