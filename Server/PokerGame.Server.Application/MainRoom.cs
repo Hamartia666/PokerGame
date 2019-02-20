@@ -26,11 +26,9 @@ namespace PokerGame.Server.Application
         {
             var client = args.Client;
             client.Name += (_clients.Count + 1).ToString();
-            _clients.Add(client);            
+            AddClient(client);           
             _output.Write(client.Name + " has connected!");
-            SendMessage(client, new Message(eCommand.info, Id, client.Id, ""));
             SendMessage(new Message(eCommand.txt, Id, null, $"{client.Name} has connected"), client);
-            SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
             SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", _rooms.Select(x => $"{x.Id.ToString()}%{x.roomName}"))));
         }
 
@@ -86,8 +84,6 @@ namespace PokerGame.Server.Application
                     break;
                 case eCommand.joinRoom:
                     _rooms.First(x => x.Id == Guid.Parse(message.Body)).AddClient(_clients.First(x => x.Id == message.ClientId));
-                    SendMessage(_clients.First(x => x.Id == message.ClientId), new Message(eCommand.info, _rooms.First(x => x.Id == Guid.Parse(message.Body)).Id, _clients.First(x => x.Id == message.ClientId).Id, ""));
-                    SendMessage(new Message(eCommand.list, _rooms.First(x => x.Id == Guid.Parse(message.Body)).Id, null, string.Join(",", _clients.Select(x => x.Name))));
                     break;
                 case eCommand.txt:
                     SendMessage(new Message(eCommand.txt, Id, null, $"{_clients.First(x => x.Id == message.ClientId).Name}: {message.Body}"));

@@ -46,6 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ucCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ucCard.Designer.cs">
+      <DependentUpon>ucCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ucPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ucPlayer.Designer.cs">
+      <DependentUpon>ucPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ucTable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ucTable.Designer.cs">
+      <DependentUpon>ucTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameRoom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +79,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\ucCard.resx">
+      <DependentUpon>ucCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ucPlayer.resx">
+      <DependentUpon>ucPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ucTable.resx">
+      <DependentUpon>ucTable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GameRoom.resx">
       <DependentUpon>GameRoom.cs</DependentUpon>
     </EmbeddedResource>

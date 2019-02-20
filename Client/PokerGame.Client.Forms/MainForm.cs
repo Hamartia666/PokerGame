@@ -158,10 +158,10 @@ namespace PokerGame.Client.Forms
         private void JoinRoomBtn_Click(object sender, EventArgs e)
         {
             var a = _roomList.First(x => x.Value == RoomList.SelectedItem.ToString()).Key;
-            commChannel.Send(new Common.Message(eCommand.joinRoom, RoomId, ClientId, $"{a}"));
             var c = new GameRoom(this);
             _rooms.Add(a, c);
             c.Show();
+            commChannel.Send(new Common.Message(eCommand.joinRoom, RoomId, ClientId, $"{a}"));
         }
     }
 }

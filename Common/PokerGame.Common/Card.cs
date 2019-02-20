@@ -8,8 +8,8 @@ namespace PokerGame.Common
 { 
     public class Card
     {
-        eSuit Suit { get; set; }
-        eValue Value { get; set; }
+        public eSuit Suit { get; set; }
+        public eValue Value { get; set; }
         public Card(eSuit s, eValue v)
         {
             Suit = s;

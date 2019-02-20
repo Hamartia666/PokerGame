@@ -62,6 +62,8 @@ namespace PokerGame.Common
                     return eCommand.joinRoom;
                 case "listRoom":
                     return eCommand.listRoom;
+                case "sitPlayer":
+                    return eCommand.sitPlayer;
                 default:
                     return eCommand.txt;
             }
