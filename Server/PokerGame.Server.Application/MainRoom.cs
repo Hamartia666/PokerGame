@@ -67,12 +67,12 @@ namespace PokerGame.Server.Application
                     client.Release();
                     _clients.Remove(client);
                     SendMessage(new Message(eCommand.txt, Id, null, $"{client.Name} has disconnected"));
-                    SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
+                    SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => $"{x.Name}%{x.Id}"))));
                     break;
                 case eCommand.changeName:
                     var c = _clients.First(x => x.Id == message.ClientId).Name;
                     _clients.First(x => x.Id == message.ClientId).Name = message.Body;
-                    SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
+                    SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => $"{x.Name}%{x.Id}"))));
                     SendMessage(new Message(eCommand.txt, Id, null, $"{c} has changed his name to {_clients.First(x => x.Id == message.ClientId).Name}"));
                     break;
                 case eCommand.createRoom:

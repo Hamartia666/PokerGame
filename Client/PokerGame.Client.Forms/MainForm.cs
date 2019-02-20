@@ -23,6 +23,7 @@ namespace PokerGame.Client.Forms
         Guid ClientId;
         Dictionary<Guid, IProcessMessage> _rooms;
         Dictionary<Guid, string> _roomList;
+        public Dictionary<Guid, string> _clientList;
 
         
         
@@ -53,6 +54,7 @@ namespace PokerGame.Client.Forms
             InitializeComponent();
             _rooms = new Dictionary<Guid, IProcessMessage>();
             _roomList = new Dictionary<Guid, string>();
+            _clientList = new Dictionary<Guid, string>();
         }
 
         private void ProcessMessages(object sender, MessageEventArgs e)
@@ -110,10 +112,17 @@ namespace PokerGame.Client.Forms
 
         private void UpdateClientList(string body)
         {
+            _clientList.Clear();
+            var c = body.Split(',');
+            foreach (var e in c)
+            {
+                var b = e.Split('%');
+                _clientList.Add(Guid.Parse(b[1]), b[0]);
+            }
             MethodInvoker invoker = new MethodInvoker(delegate
             {
                 ClientList.Items.Clear();
-                ClientList.Items.AddRange(body.Split(','));
+                ClientList.Items.AddRange(_clientList.Values.ToArray());
             });
             this.Invoke(invoker);
         }

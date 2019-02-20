@@ -13,6 +13,7 @@ namespace PokerGame.Server.Application
     {
         List<Client> _playingClients;
         private GameEngine _gameEngine;
+        private const int MAX_PLAYERS = 4;
 
         public GameRoom(IOutput output) : base(output)
         {
@@ -24,7 +25,7 @@ namespace PokerGame.Server.Application
             switch (message.Command)
             {
                 case eCommand.sitPlayer:
-                    if (_playingClients.Count < 4)
+                    if (_playingClients.Count < MAX_PLAYERS)
                     {
                         _playingClients.Add(_clients.First(x => x.Id == message.ClientId));
                         SendMessage(new Message(eCommand.sitPlayer, Id, message.ClientId, ""));

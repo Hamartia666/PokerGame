@@ -42,7 +42,7 @@ namespace PokerGame.Server.Application
         {
             _clients.Add(c);
             SendMessage(c, new Message(eCommand.info, Id, c.Id, ""));
-            SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => x.Name))));
+            SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => $"{x.Name}%{x.Id}"))));
         }
 
         public virtual void ProcessMessage(IMessage message)

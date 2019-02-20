@@ -31,8 +31,8 @@
             this.playerName = new System.Windows.Forms.Label();
             this.cash_label = new System.Windows.Forms.Label();
             this.cash_value = new System.Windows.Forms.Label();
-            this.ucCard1 = new PokerGame.Client.Forms.Controls.ucCard();
             this.ucCard2 = new PokerGame.Client.Forms.Controls.ucCard();
+            this.ucCard1 = new PokerGame.Client.Forms.Controls.ucCard();
             this.SuspendLayout();
             // 
             // playerName
@@ -40,9 +40,9 @@
             this.playerName.AutoSize = true;
             this.playerName.Location = new System.Drawing.Point(3, 11);
             this.playerName.Name = "playerName";
-            this.playerName.Size = new System.Drawing.Size(35, 13);
+            this.playerName.Size = new System.Drawing.Size(63, 13);
             this.playerName.TabIndex = 0;
-            this.playerName.Text = "label1";
+            this.playerName.Text = "playerName";
             // 
             // cash_label
             // 
@@ -62,14 +62,6 @@
             this.cash_value.TabIndex = 2;
             this.cash_value.Text = "0";
             // 
-            // ucCard1
-            // 
-            this.ucCard1.Location = new System.Drawing.Point(6, 46);
-            this.ucCard1.Name = "ucCard1";
-            this.ucCard1.ShowValue = false;
-            this.ucCard1.Size = new System.Drawing.Size(84, 107);
-            this.ucCard1.TabIndex = 3;
-            // 
             // ucCard2
             // 
             this.ucCard2.Location = new System.Drawing.Point(96, 46);
@@ -77,6 +69,14 @@
             this.ucCard2.ShowValue = false;
             this.ucCard2.Size = new System.Drawing.Size(84, 107);
             this.ucCard2.TabIndex = 4;
+            // 
+            // ucCard1
+            // 
+            this.ucCard1.Location = new System.Drawing.Point(6, 46);
+            this.ucCard1.Name = "ucCard1";
+            this.ucCard1.ShowValue = false;
+            this.ucCard1.Size = new System.Drawing.Size(84, 107);
+            this.ucCard1.TabIndex = 3;
             // 
             // ucPlayer
             // 

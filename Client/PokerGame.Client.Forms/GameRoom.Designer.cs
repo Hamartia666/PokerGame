@@ -35,7 +35,8 @@
             this.ucPlayer1 = new PokerGame.Client.Forms.Controls.ucPlayer();
             this.ucPlayer2 = new PokerGame.Client.Forms.Controls.ucPlayer();
             this.ucPlayer3 = new PokerGame.Client.Forms.Controls.ucPlayer();
-            this.ucPlayer4 = new PokerGame.Client.Forms.Controls.ucPlayer();
+            this.ucPlayerMain = new PokerGame.Client.Forms.Controls.ucPlayer();
+            this.SitBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ClientList
@@ -62,6 +63,7 @@
             this.SendTxtBtn.TabIndex = 2;
             this.SendTxtBtn.Text = "Send";
             this.SendTxtBtn.UseVisualStyleBackColor = true;
+            this.SendTxtBtn.Click += new System.EventHandler(this.SendTxtBtn_Click);
             // 
             // InputTxtBot
             // 
@@ -91,19 +93,30 @@
             this.ucPlayer3.Size = new System.Drawing.Size(194, 147);
             this.ucPlayer3.TabIndex = 6;
             // 
-            // ucPlayer4
+            // ucPlayerMain
             // 
-            this.ucPlayer4.Location = new System.Drawing.Point(554, 113);
-            this.ucPlayer4.Name = "ucPlayer4";
-            this.ucPlayer4.Size = new System.Drawing.Size(194, 147);
-            this.ucPlayer4.TabIndex = 7;
+            this.ucPlayerMain.Location = new System.Drawing.Point(554, 113);
+            this.ucPlayerMain.Name = "ucPlayerMain";
+            this.ucPlayerMain.Size = new System.Drawing.Size(194, 147);
+            this.ucPlayerMain.TabIndex = 7;
+            // 
+            // SitBtn
+            // 
+            this.SitBtn.Location = new System.Drawing.Point(492, 330);
+            this.SitBtn.Name = "SitBtn";
+            this.SitBtn.Size = new System.Drawing.Size(75, 23);
+            this.SitBtn.TabIndex = 8;
+            this.SitBtn.Text = "Sit in Table";
+            this.SitBtn.UseVisualStyleBackColor = true;
+            this.SitBtn.Click += new System.EventHandler(this.SitBtn_Click);
             // 
             // GameRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(760, 581);
-            this.Controls.Add(this.ucPlayer4);
+            this.Controls.Add(this.SitBtn);
+            this.Controls.Add(this.ucPlayerMain);
             this.Controls.Add(this.ucPlayer3);
             this.Controls.Add(this.ucPlayer2);
             this.Controls.Add(this.ucPlayer1);
@@ -128,6 +141,7 @@
         private Controls.ucPlayer ucPlayer1;
         private Controls.ucPlayer ucPlayer2;
         private Controls.ucPlayer ucPlayer3;
-        private Controls.ucPlayer ucPlayer4;
+        private Controls.ucPlayer ucPlayerMain;
+        private System.Windows.Forms.Button SitBtn;
     }
 }
