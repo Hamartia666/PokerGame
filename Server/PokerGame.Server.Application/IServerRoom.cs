@@ -1,6 +1,7 @@
 ﻿using PokerGame.Common;
 using PokerGame.Server.Communication;
 using System;
+using System.Collections.Generic;
 
 namespace PokerGame.Server.Application
 {
@@ -12,5 +13,6 @@ namespace PokerGame.Server.Application
         void SendMessage(Client client, IMessage message);
         void ProcessMessage(IMessage message);
         void AddClient(Client c);
+        List<Client> _clients { get; set; }
     }
 }

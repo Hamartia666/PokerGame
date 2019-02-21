@@ -53,7 +53,7 @@ namespace PokerGame.Server.Game
             _hands.Add(p, new List<Card>());
         }
 
-        private void StartGame()
+        public void StartGame()
         {
             Shuffle();
             DealHands();

@@ -64,6 +64,8 @@ namespace PokerGame.Common
                     return eCommand.listRoom;
                 case "sitPlayer":
                     return eCommand.sitPlayer;
+                case "startGame":
+                    return eCommand.startGame;
                 default:
                     return eCommand.txt;
             }

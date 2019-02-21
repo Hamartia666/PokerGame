@@ -17,5 +17,6 @@ namespace PokerGame.Common
         joinRoom,
         listRoom,
         sitPlayer,
+        startGame,
     }
 }

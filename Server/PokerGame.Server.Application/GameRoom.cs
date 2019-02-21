@@ -14,10 +14,12 @@ namespace PokerGame.Server.Application
         List<Client> _playingClients;
         private GameEngine _gameEngine;
         private const int MAX_PLAYERS = 4;
+        private int startVotes = 0;
 
         public GameRoom(IOutput output) : base(output)
         {
             _playingClients = new List<Client>();
+            _gameEngine = new GameEngine();
         }
 
         public override void ProcessMessage(IMessage message)
@@ -36,6 +38,25 @@ namespace PokerGame.Server.Application
                     }
                     break;
                 case eCommand.txt:
+                    SendMessage(new Message(eCommand.txt, Id, null, $"{_clients.First(x => x.Id == message.ClientId).Name}: {message.Body}"));
+                    break;
+                case eCommand.startGame:
+                    startVotes++;
+                    if (startVotes == _playingClients.Count)
+                    {
+                        if (startVotes == 1)
+                        {
+                            SendMessage(new Message(eCommand.txt, Id, null, "There must be at least two players to start!"));
+                        }
+                        else
+                        {
+                            _gameEngine.StartGame();
+                        }
+                    }
+                    else
+                    {
+                        SendMessage(new Message(eCommand.txt, Id, null, $"Awaiting players: {startVotes}/{_playingClients.Count}"));
+                    }
                     break;
                 default:
                     break;

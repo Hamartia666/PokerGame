@@ -25,6 +25,8 @@ namespace PokerGame.Client.Forms
         Dictionary<Guid, string> _roomList;
         public Dictionary<Guid, string> _clientList;
 
+
+
         
         
         private void Send()

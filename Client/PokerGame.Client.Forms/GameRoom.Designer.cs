@@ -37,6 +37,7 @@
             this.ucPlayer3 = new PokerGame.Client.Forms.Controls.ucPlayer();
             this.ucPlayerMain = new PokerGame.Client.Forms.Controls.ucPlayer();
             this.SitBtn = new System.Windows.Forms.Button();
+            this.StartBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ClientList
@@ -106,15 +107,26 @@
             this.SitBtn.Name = "SitBtn";
             this.SitBtn.Size = new System.Drawing.Size(75, 23);
             this.SitBtn.TabIndex = 8;
-            this.SitBtn.Text = "Sit in Table";
+            this.SitBtn.Text = "Sit at Table";
             this.SitBtn.UseVisualStyleBackColor = true;
             this.SitBtn.Click += new System.EventHandler(this.SitBtn_Click);
+            // 
+            // StartBtn
+            // 
+            this.StartBtn.Location = new System.Drawing.Point(574, 329);
+            this.StartBtn.Name = "StartBtn";
+            this.StartBtn.Size = new System.Drawing.Size(75, 23);
+            this.StartBtn.TabIndex = 9;
+            this.StartBtn.Text = "Start";
+            this.StartBtn.UseVisualStyleBackColor = true;
+            this.StartBtn.Click += new System.EventHandler(this.StartBtn_Click);
             // 
             // GameRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(760, 581);
+            this.Controls.Add(this.StartBtn);
             this.Controls.Add(this.SitBtn);
             this.Controls.Add(this.ucPlayerMain);
             this.Controls.Add(this.ucPlayer3);
@@ -143,5 +155,6 @@
         private Controls.ucPlayer ucPlayer3;
         private Controls.ucPlayer ucPlayerMain;
         private System.Windows.Forms.Button SitBtn;
+        private System.Windows.Forms.Button StartBtn;
     }
 }

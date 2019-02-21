@@ -71,9 +71,12 @@ namespace PokerGame.Server.Application
                     break;
                 case eCommand.changeName:
                     var c = _clients.First(x => x.Id == message.ClientId).Name;
-                    _clients.First(x => x.Id == message.ClientId).Name = message.Body;
-                    SendMessage(new Message(eCommand.list, Id, null, string.Join(",", _clients.Select(x => $"{x.Name}%{x.Id}"))));
-                    SendMessage(new Message(eCommand.txt, Id, null, $"{c} has changed his name to {_clients.First(x => x.Id == message.ClientId).Name}"));
+                    foreach (var a in _rooms.Where(x => x._clients.Where(y => y.Id == message.ClientId).Any()))
+                    {
+                        a._clients.First(x => x.Id == message.ClientId).Name = message.Body;
+                        a.SendMessage(new Message(eCommand.list, a.Id, null, string.Join(",", a._clients.Select(x => $"{x.Name}%{x.Id}"))));
+                        a.SendMessage(new Message(eCommand.txt, a.Id, null, $"{c} has changed his name to {a._clients.First(x => x.Id == message.ClientId).Name}"));
+                    }
                     break;
                 case eCommand.createRoom:
                     var gameRoom = new GameRoom(_output);

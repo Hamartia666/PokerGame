@@ -23,6 +23,7 @@ namespace PokerGame.Client.Forms
         public GameRoom(MainForm parent)
         {
             InitializeComponent();
+            StartBtn.Enabled = false;
             _parent = parent;
             _clientPlayers = new Dictionary<Guid, string>();
             _ucPlayers = new List<ucPlayer>
@@ -73,6 +74,12 @@ namespace PokerGame.Client.Forms
                 if (clientId == ClientId)
                 {
                     ucPlayerMain.SitPlayer(name, clientId);
+                    MethodInvoker invoker = new MethodInvoker(delegate
+                    {
+                        StartBtn.Enabled = true;
+                    });
+                    this.Invoke(invoker);
+                    AppendToChatBox("You have joined the table");
                 }
                 else
                 {
@@ -89,6 +96,10 @@ namespace PokerGame.Client.Forms
             {
                 var b = e.Split('%');
                 a.Add(b[0]);
+                if (_clientPlayers.ContainsKey(Guid.Parse(b[1])))
+                {
+                    _ucPlayers.First(x => x._clientId == Guid.Parse(b[1])).UpdateName(b[0]);
+                }
             }
             MethodInvoker invoker = new MethodInvoker(delegate
             {
@@ -116,6 +127,12 @@ namespace PokerGame.Client.Forms
         {
             _parent.CommChannel.Send(new Common.Message(eCommand.txt, RoomId, ClientId, InputTxtBot.Text));
             InputTxtBot.Clear();
+        }
+
+        private void StartBtn_Click(object sender, EventArgs e)
+        {
+            StartBtn.Enabled = false;
+            _parent.CommChannel.Send(new Common.Message(eCommand.startGame, RoomId, ClientId, ""));
         }
     }
 }
