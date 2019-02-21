@@ -30,6 +30,7 @@ namespace PokerGame.Server.Application
                     if (_playingClients.Count < MAX_PLAYERS)
                     {
                         _playingClients.Add(_clients.First(x => x.Id == message.ClientId));
+                        _gameEngine.AddPlayer(_clients.First(x => x.Id == message.ClientId));
                         SendMessage(new Message(eCommand.sitPlayer, Id, message.ClientId, ""));
                     }
                     else
@@ -51,6 +52,10 @@ namespace PokerGame.Server.Application
                         else
                         {
                             _gameEngine.StartGame();
+                            //now the hands are dealt and deck is shuffled.
+                            //we send the hand information to client
+                            var hands = string.Join("*",_gameEngine.Hands.Select(x => $"{x.Key.Id}%{string.Join(";", x.Value.Select(y => $"{(int)y.Suit},{(int)y.Value}"))}"));
+                            SendMessage(new Message(eCommand.startGame, Id, null, hands));
                         }
                     }
                     else
@@ -61,8 +66,6 @@ namespace PokerGame.Server.Application
                 default:
                     break;
             }
-        }    
-        
-        
+        }
     }
 }

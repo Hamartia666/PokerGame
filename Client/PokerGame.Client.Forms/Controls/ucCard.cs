@@ -19,22 +19,20 @@ namespace PokerGame.Client.Forms.Controls
 
         public void SetCardValue(Card card)
         {
-            _card = card;
-            
+            _card = card;            
         }
 
         private void ShowCardValue()
         {
             if (_showValue)
             {
-                Value.Text = _card.Value.ToString();
-                Suit.Text = _card.Suit.ToString();
-            }
-            else
-            {
-                //show backgrund
-                Value.Text = "hidden";
-                Suit.Text = "hidden";
+                MethodInvoker invoker = new MethodInvoker(delegate
+                {
+                    Value.Text = _card.Value.ToString();
+                    Suit.Text = _card.Suit.ToString();
+
+                });
+                this.Invoke(invoker);
             }
         }
 

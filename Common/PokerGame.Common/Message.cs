@@ -66,6 +66,14 @@ namespace PokerGame.Common
                     return eCommand.sitPlayer;
                 case "startGame":
                     return eCommand.startGame;
+                case "bid":
+                    return eCommand.bid;
+                case "showCards":
+                    return eCommand.showCards;
+                case "fold":
+                    return eCommand.fold;
+                case "turn":
+                    return eCommand.turn;
                 default:
                     return eCommand.txt;
             }

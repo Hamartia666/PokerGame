@@ -18,5 +18,9 @@ namespace PokerGame.Common
         listRoom,
         sitPlayer,
         startGame,
+        turn,
+        bid,
+        fold,
+        showCards,
     }
 }

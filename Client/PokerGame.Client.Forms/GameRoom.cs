@@ -52,10 +52,50 @@ namespace PokerGame.Client.Forms
                 case eCommand.sitPlayer:
                     UpdatePlayers(msg.ClientId.Value);
                     break;
+                case eCommand.startGame:
+                    ProcessStartGame(msg.Body);
+                    break;
                 default:
                     Close();
                     break;
             }
+        }
+
+        private void ProcessStartGame(string body)
+        {
+            //split all hands
+            var hands = body.Split('*');
+            foreach (var hand in hands)
+            {
+                var data = hand.Split('%');
+                var clientId = Guid.Parse(data[0]);
+                var cards = GetCards(data[1]);
+                ProcessSingleHand(clientId, cards);
+            }
+        }
+
+        private void ProcessSingleHand(Guid clientId, List<Card> cards)
+        {
+            if (_ucPlayers.Any(x => x._clientId == clientId))
+            {
+                _ucPlayers.First(x => x._clientId == clientId).UpdateCards(cards);
+                if (clientId == ClientId)
+                    _ucPlayers.First(x => x._clientId == clientId).DisplayCards();
+            }
+
+        }
+
+        private List<Card> GetCards(string input)
+        {
+            var cardList = new List<Card>();
+            //split cards
+            var cards = input.Split(';');
+            foreach (var c in cards)
+            {
+                var card = c.Split(',').Select(int.Parse).ToArray();
+                cardList.Add(new Card((eSuit)card[0], (eValue)card[1]));
+            }
+            return cardList;
         }
 
         private void UpdatePlayers(Guid clientId)
@@ -121,6 +161,7 @@ namespace PokerGame.Client.Forms
         private void SitBtn_Click(object sender, EventArgs e)
         {
             _parent.CommChannel.Send(new Common.Message(eCommand.sitPlayer, RoomId, ClientId, ""));
+            SitBtn.Enabled = false;
         }
 
         private void SendTxtBtn_Click(object sender, EventArgs e)

@@ -43,14 +43,14 @@
             // ClientList
             // 
             this.ClientList.FormattingEnabled = true;
-            this.ClientList.Location = new System.Drawing.Point(628, 12);
+            this.ClientList.Location = new System.Drawing.Point(835, 12);
             this.ClientList.Name = "ClientList";
             this.ClientList.Size = new System.Drawing.Size(120, 95);
             this.ClientList.TabIndex = 0;
             // 
             // ChatBox
             // 
-            this.ChatBox.Location = new System.Drawing.Point(492, 367);
+            this.ChatBox.Location = new System.Drawing.Point(699, 367);
             this.ChatBox.Multiline = true;
             this.ChatBox.Name = "ChatBox";
             this.ChatBox.Size = new System.Drawing.Size(256, 171);
@@ -58,7 +58,7 @@
             // 
             // SendTxtBtn
             // 
-            this.SendTxtBtn.Location = new System.Drawing.Point(648, 544);
+            this.SendTxtBtn.Location = new System.Drawing.Point(855, 544);
             this.SendTxtBtn.Name = "SendTxtBtn";
             this.SendTxtBtn.Size = new System.Drawing.Size(100, 23);
             this.SendTxtBtn.TabIndex = 2;
@@ -68,42 +68,42 @@
             // 
             // InputTxtBot
             // 
-            this.InputTxtBot.Location = new System.Drawing.Point(492, 545);
+            this.InputTxtBot.Location = new System.Drawing.Point(699, 545);
             this.InputTxtBot.Name = "InputTxtBot";
             this.InputTxtBot.Size = new System.Drawing.Size(150, 20);
             this.InputTxtBot.TabIndex = 3;
             // 
             // ucPlayer1
             // 
-            this.ucPlayer1.Location = new System.Drawing.Point(12, 12);
+            this.ucPlayer1.Location = new System.Drawing.Point(279, 12);
             this.ucPlayer1.Name = "ucPlayer1";
             this.ucPlayer1.Size = new System.Drawing.Size(194, 147);
             this.ucPlayer1.TabIndex = 4;
             // 
             // ucPlayer2
             // 
-            this.ucPlayer2.Location = new System.Drawing.Point(12, 165);
+            this.ucPlayer2.Location = new System.Drawing.Point(25, 206);
             this.ucPlayer2.Name = "ucPlayer2";
             this.ucPlayer2.Size = new System.Drawing.Size(194, 147);
             this.ucPlayer2.TabIndex = 5;
             // 
             // ucPlayer3
             // 
-            this.ucPlayer3.Location = new System.Drawing.Point(12, 318);
+            this.ucPlayer3.Location = new System.Drawing.Point(488, 206);
             this.ucPlayer3.Name = "ucPlayer3";
             this.ucPlayer3.Size = new System.Drawing.Size(194, 147);
             this.ucPlayer3.TabIndex = 6;
             // 
             // ucPlayerMain
             // 
-            this.ucPlayerMain.Location = new System.Drawing.Point(554, 113);
+            this.ucPlayerMain.Location = new System.Drawing.Point(279, 418);
             this.ucPlayerMain.Name = "ucPlayerMain";
             this.ucPlayerMain.Size = new System.Drawing.Size(194, 147);
             this.ucPlayerMain.TabIndex = 7;
             // 
             // SitBtn
             // 
-            this.SitBtn.Location = new System.Drawing.Point(492, 330);
+            this.SitBtn.Location = new System.Drawing.Point(699, 330);
             this.SitBtn.Name = "SitBtn";
             this.SitBtn.Size = new System.Drawing.Size(75, 23);
             this.SitBtn.TabIndex = 8;
@@ -113,7 +113,7 @@
             // 
             // StartBtn
             // 
-            this.StartBtn.Location = new System.Drawing.Point(574, 329);
+            this.StartBtn.Location = new System.Drawing.Point(781, 329);
             this.StartBtn.Name = "StartBtn";
             this.StartBtn.Size = new System.Drawing.Size(75, 23);
             this.StartBtn.TabIndex = 9;
@@ -125,7 +125,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(760, 581);
+            this.ClientSize = new System.Drawing.Size(967, 581);
             this.Controls.Add(this.StartBtn);
             this.Controls.Add(this.SitBtn);
             this.Controls.Add(this.ucPlayerMain);

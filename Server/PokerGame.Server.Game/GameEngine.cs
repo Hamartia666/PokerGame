@@ -1,4 +1,5 @@
 ﻿using PokerGame.Common;
+using PokerGame.Server.Communication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace PokerGame.Server.Game
     public class GameEngine
     {
         //deck
-        List<Card> _deck;
-        Dictionary<Player, int> _bids = new Dictionary<Player, int>();
-        List<Card> _table = new List<Card>();
-        Dictionary<Player, List<Card>> _hands = new Dictionary<Player, List<Card>>();
-        int poll;
+        private List<Card> _deck;
+        private Dictionary<Client, int> _bids = new Dictionary<Client, int>();
+        public List<Card> Table { get; } = new List<Card>();
+        public Dictionary<Client, List<Card>> Hands { get; } = new Dictionary<Client, List<Card>>();
+        private int _poll;
 
 
         public GameEngine()
@@ -48,9 +49,9 @@ namespace PokerGame.Server.Game
             }
         }
 
-        private void AddPlayer(Player p)
+        public void AddPlayer(Client p)
         {
-            _hands.Add(p, new List<Card>());
+            Hands.Add(p, new List<Card>());
         }
 
         public void StartGame()
@@ -63,7 +64,7 @@ namespace PokerGame.Server.Game
         {
             for (var i = 0; i < 2; i++)
             {
-                foreach (var p in _hands)
+                foreach (var p in Hands)
                 {
                     p.Value.Add(PopCard());
                 }
@@ -74,13 +75,13 @@ namespace PokerGame.Server.Game
         {
             for (var i = 0; i < 3; i++)
             {
-                _table.Add(PopCard());
+                Table.Add(PopCard());
             }
         }
 
         private void Turn_River()
         {
-            _table.Add(PopCard());
+            Table.Add(PopCard());
         }
 
         private Card PopCard()
@@ -95,12 +96,12 @@ namespace PokerGame.Server.Game
         {
             foreach (var p in _bids)
             {
-                poll += p.Value;
+                _poll += p.Value;
             }
             _bids.Clear();
         }
         
-        private void AddBid(Player p, int bid)
+        private void AddBid(Client p, int bid)
         {
             if (_bids.ContainsKey(p))
             {

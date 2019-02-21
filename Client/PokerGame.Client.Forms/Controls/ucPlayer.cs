@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PokerGame.Common;
 
 namespace PokerGame.Client.Forms.Controls
 {
@@ -40,5 +41,18 @@ namespace PokerGame.Client.Forms.Controls
             });
             this.Invoke(invoker);
         }
+
+        public void UpdateCards(List<Card> cards)
+        {
+            ucCard1.SetCardValue(cards[0]);
+            ucCard2.SetCardValue(cards[1]);
+        }
+
+        public void DisplayCards()
+        {
+            ucCard1.ShowValue = true;
+            ucCard2.ShowValue = true;
+        }
+
     }
 }
