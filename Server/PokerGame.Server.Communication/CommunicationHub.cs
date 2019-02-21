@@ -7,17 +7,26 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using PokerGame.Common;
+using System.Configuration;
 
 namespace PokerGame.Server.Communication
 {
     public class CommunicationHub
     {
-        private const int DEFAULTPORT = 100;
-        private static byte[] _buffer = new byte[1024];
-        private static Socket _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private readonly int _port;
+        private byte[] _buffer = new byte[1024];
+        private readonly Socket _serverSocket;
 
         public EventHandler<ClientEventArgs> OnClientConnect;
         public EventHandler<MessageEventArgs> OnMessageReceived;
+
+        public CommunicationHub()
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["ServerPort"], out int port))
+                port = 50000;
+            _port = port;
+            _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
 
         public void ClientConnected(Client c)
         {
@@ -37,12 +46,11 @@ namespace PokerGame.Server.Communication
 
         public bool ServerSetup()
         {
-            return ServerSetup(DEFAULTPORT);
+            return ServerSetup(_port);
         }
 
         public bool ServerSetup(int port)
-        {
-            
+        {            
             try
             {
                 _serverSocket.Bind(new IPEndPoint(IPAddress.Any, port));

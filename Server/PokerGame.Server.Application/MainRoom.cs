@@ -32,10 +32,10 @@ namespace PokerGame.Server.Application
             SendMessage(new Message(eCommand.listRoom, Id, null, string.Join(",", _rooms.Select(x => $"{x.Id.ToString()}%{x.roomName}"))));
         }
 
-        public bool StartServer(int port)
+        public bool StartServer()
         {
             _hub = new CommunicationHub();
-            if (_hub.ServerSetup(port))
+            if (_hub.ServerSetup())
             {
                 _output.Write("Server started!");
                 _hub.OnClientConnect += Connect;

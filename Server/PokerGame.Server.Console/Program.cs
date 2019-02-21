@@ -15,7 +15,7 @@ namespace PokerGame.Server.Console
             //create main server room
             var mainRoom = new MainRoom(new Output());
             //start listening
-            mainRoom.StartServer(100);
+            mainRoom.StartServer();
             System.Console.ReadLine();
         }
 

@@ -7,6 +7,6 @@ namespace PokerGame.Server.Application
     {
         void Connect(object sender, ClientEventArgs args);
         void ReceiveMessage(object sender, MessageEventArgs args);
-        bool StartServer(int port);
+        bool StartServer();
     }
 }
