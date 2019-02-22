@@ -74,6 +74,12 @@ namespace PokerGame.Common
                     return eCommand.fold;
                 case "turn":
                     return eCommand.turn;
+                case "allIn":
+                    return eCommand.allIn;
+                case "tableCards":
+                    return eCommand.tableCards;
+                case "check":
+                    return eCommand.check;
                 default:
                     return eCommand.txt;
             }

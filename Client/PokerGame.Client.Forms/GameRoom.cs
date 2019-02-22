@@ -71,7 +71,7 @@ namespace PokerGame.Client.Forms
         private void TakeTurn()
         {
             grpActions.Enabled = true;
-            if (_ucPlayers.Where(x => x.Bid != 0).Any())
+            if (_ucPlayers.First(x => x._clientId == ClientId).Bid != _ucPlayers.Max(x => x.Bid))
             {
                 CheckBtn.Enabled = false;
             }
