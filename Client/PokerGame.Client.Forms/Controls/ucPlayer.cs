@@ -16,6 +16,8 @@ namespace PokerGame.Client.Forms.Controls
         //PlayerGUID
         public Guid? _clientId = null;
         public bool IsFree { get { return _clientId == null; } }
+        public int Cash { get; private set; } = 100;
+        public int Bid { get; private set; } = 0;
         //Info o kartach
         public ucPlayer()
         {
@@ -28,7 +30,8 @@ namespace PokerGame.Client.Forms.Controls
             {
                 playerName.Text = name;
                 _clientId = guid;
-                cash_value.Text = "100";
+                cash_value.Text = Cash.ToString();
+                Bid_value.Text = Bid.ToString();
             });
             this.Invoke(invoker);
         }
@@ -52,6 +55,25 @@ namespace PokerGame.Client.Forms.Controls
         {
             ucCard1.ShowValue = true;
             ucCard2.ShowValue = true;
+        }
+
+        public void UpdateBid(int bid)
+        {
+            MethodInvoker invoker = new MethodInvoker(delegate
+            {
+                if (bid == 0)
+                {
+                    Bid = 0;
+                }
+                else
+                {
+                    Cash -= Bid - bid;
+                    Bid = bid;                    
+                }
+                Bid_value.Text = Bid.ToString();
+                cash_value.Text = Cash.ToString();
+            });
+            this.Invoke(invoker);
         }
 
     }

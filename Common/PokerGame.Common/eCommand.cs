@@ -21,6 +21,8 @@ namespace PokerGame.Common
         turn,
         bid,
         fold,
+        allIn,
+        check,
         showCards,
     }
 }

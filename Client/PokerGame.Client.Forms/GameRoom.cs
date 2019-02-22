@@ -55,10 +55,39 @@ namespace PokerGame.Client.Forms
                 case eCommand.startGame:
                     ProcessStartGame(msg.Body);
                     break;
+                case eCommand.bid:
+                    ProcessBids(msg.Body);
+                    break;
+                case eCommand.turn:
+                    if (ClientId == msg.ClientId)
+                        TakeTurn();
+                    break;
                 default:
                     Close();
                     break;
             }
+        }
+
+        private void TakeTurn()
+        {
+            grpActions.Enabled = true;
+            if (_ucPlayers.Where(x => x.Bid != 0).Any())
+            {
+                CheckBtn.Enabled = false;
+            }
+        }
+
+        private void ProcessBids(string body)
+        {
+            var players = body.Split(',');
+            foreach (var c in players)
+            {
+                var data = c.Split('%');
+                var clientId = Guid.Parse(data[0]);
+                var bid = int.Parse(data[1]);
+                _ucPlayers.First(x => x._clientId == clientId).UpdateBid(bid);
+            }
+            BidValue.Maximum = _ucPlayers.First(x => x._clientId == ClientId).Cash;
         }
 
         private void ProcessStartGame(string body)
@@ -174,6 +203,37 @@ namespace PokerGame.Client.Forms
         {
             StartBtn.Enabled = false;
             _parent.CommChannel.Send(new Common.Message(eCommand.startGame, RoomId, ClientId, ""));
+        }
+
+        private void BidBtn_Click(object sender, EventArgs e)
+        {
+            if (BidValue.Value == _ucPlayers.First(x => x._clientId == ClientId).Cash)
+            {
+                _parent.CommChannel.Send(new Common.Message(eCommand.allIn, RoomId, ClientId, BidValue.Value.ToString()));
+            }
+            else
+            {
+                _parent.CommChannel.Send(new Common.Message(eCommand.bid, RoomId, ClientId, BidValue.Value.ToString()));
+            }
+            grpActions.Enabled = false;
+        }
+
+        private void FoldBtn_Click(object sender, EventArgs e)
+        {
+            _parent.CommChannel.Send(new Common.Message(eCommand.fold, RoomId, ClientId, ""));
+            grpActions.Enabled = false;
+        }
+
+        private void CheckBtn_Click(object sender, EventArgs e)
+        {
+            _parent.CommChannel.Send(new Common.Message(eCommand.check, RoomId, ClientId, ""));
+            grpActions.Enabled = false;
+        }
+
+        private void All_inBtn_Click(object sender, EventArgs e)
+        {
+            _parent.CommChannel.Send(new Common.Message(eCommand.allIn, RoomId, ClientId, _ucPlayers.First(x => x._clientId == ClientId).Cash.ToString()));
+            grpActions.Enabled = false;
         }
     }
 }

@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bid.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="eBlind.cs" />
     <Compile Include="eValue.cs" />
     <Compile Include="eCommand.cs" />
     <Compile Include="eSuit.cs" />

@@ -12,11 +12,12 @@ namespace PokerGame.Server.Game
     {
         //deck
         private List<Card> _deck;
-        private Dictionary<Client, int> _bids = new Dictionary<Client, int>();
+        //private Dictionary<Client, Bid> _bids = new Dictionary<Client, Bid>();
         public List<Card> Table { get; } = new List<Card>();
-        public Dictionary<Client, List<Card>> Hands { get; } = new Dictionary<Client, List<Card>>();
+        //public Dictionary<Client, List<Card>> Hands { get; } = new Dictionary<Client, List<Card>>();
         private int _poll;
 
+        public List<Player> Players { get; } = new List<Player>();
 
         public GameEngine()
         {
@@ -51,22 +52,58 @@ namespace PokerGame.Server.Game
 
         public void AddPlayer(Client p)
         {
-            Hands.Add(p, new List<Card>());
+            Players.Add(new Player(p.Id));
         }
 
         public void StartGame()
         {
             Shuffle();
             DealHands();
+            SetBlinds();            
+        }
+
+        private void SetBlinds()
+        {
+            if (Players.Where(x => x.Bid.Blind != eBlind.no).Any())
+            {
+                var rnd = new Random();
+                var c = rnd.Next(Players.Count);
+                Players[c++].Bid.Blind = eBlind.big;
+                Players[c++%Players.Count].Bid.Blind = eBlind.small;
+                InitializeTurn(c % Players.Count);
+            }
+            else
+            {
+                var index = Players.IndexOf(Players.First(x => x.Bid.Blind == eBlind.big));
+                Players[index++].Bid.Blind = eBlind.no;
+                Players[index++ % Players.Count].Bid.Blind = eBlind.big;
+                Players[index++ % Players.Count].Bid.Blind = eBlind.small;
+                InitializeTurn(index % Players.Count);
+            }
+            
+        }
+
+        private void InitializeTurn(int index)
+        {
+            Players[index].HasTurn = true;
+        }
+
+        public void NextTurn()
+        {     
+            //what if player is all in
+            var playersLeft = Players.Where(x => !x.HasFolded).ToList();
+            var index = playersLeft.IndexOf(playersLeft.First(x => x.HasTurn));
+            playersLeft[index++ % playersLeft.Count].HasTurn = false;
+            playersLeft[index % playersLeft.Count].HasTurn = true;
         }
 
         private void DealHands()
         {
             for (var i = 0; i < 2; i++)
             {
-                foreach (var p in Hands)
+                foreach (var p in Players)
                 {
-                    p.Value.Add(PopCard());
+                    p.Hand.Add(PopCard());
                 }
             }           
         }
@@ -90,27 +127,16 @@ namespace PokerGame.Server.Game
             _deck.RemoveAt(0);
             return c;
         }
-        //hands
 
         private void SumBids()
         {
-            foreach (var p in _bids)
-            {
-                _poll += p.Value;
-            }
-            _bids.Clear();
+            _poll += Players.Sum(x => x.Bid.bid);
+            Players.Select(x => x.Bid.bid=0);            
         }
         
-        private void AddBid(Client p, int bid)
+        public void AddBid(Guid Id, int bid)
         {
-            if (_bids.ContainsKey(p))
-            {
-                _bids[p] += bid;
-            }
-            else
-            {
-                _bids.Add(p, bid);
-            }
+            Players.First(x => x.ClientId == Id).Bid.bid += bid;
         }
 
         //evaluation who won

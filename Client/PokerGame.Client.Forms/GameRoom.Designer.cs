@@ -38,6 +38,14 @@
             this.ucPlayerMain = new PokerGame.Client.Forms.Controls.ucPlayer();
             this.SitBtn = new System.Windows.Forms.Button();
             this.StartBtn = new System.Windows.Forms.Button();
+            this.All_inBtn = new System.Windows.Forms.Button();
+            this.CheckBtn = new System.Windows.Forms.Button();
+            this.FoldBtn = new System.Windows.Forms.Button();
+            this.BidBtn = new System.Windows.Forms.Button();
+            this.BidValue = new System.Windows.Forms.NumericUpDown();
+            this.grpActions = new System.Windows.Forms.GroupBox();
+            ((System.ComponentModel.ISupportInitialize)(this.BidValue)).BeginInit();
+            this.grpActions.SuspendLayout();
             this.SuspendLayout();
             // 
             // ClientList
@@ -121,11 +129,94 @@
             this.StartBtn.UseVisualStyleBackColor = true;
             this.StartBtn.Click += new System.EventHandler(this.StartBtn_Click);
             // 
+            // All_inBtn
+            // 
+            this.All_inBtn.Location = new System.Drawing.Point(100, 122);
+            this.All_inBtn.Name = "All_inBtn";
+            this.All_inBtn.Size = new System.Drawing.Size(75, 23);
+            this.All_inBtn.TabIndex = 10;
+            this.All_inBtn.Text = "All in";
+            this.All_inBtn.UseVisualStyleBackColor = true;
+            this.All_inBtn.Click += new System.EventHandler(this.All_inBtn_Click);
+            // 
+            // CheckBtn
+            // 
+            this.CheckBtn.Location = new System.Drawing.Point(100, 93);
+            this.CheckBtn.Name = "CheckBtn";
+            this.CheckBtn.Size = new System.Drawing.Size(75, 23);
+            this.CheckBtn.TabIndex = 11;
+            this.CheckBtn.Text = "Check";
+            this.CheckBtn.UseVisualStyleBackColor = true;
+            this.CheckBtn.Click += new System.EventHandler(this.CheckBtn_Click);
+            // 
+            // FoldBtn
+            // 
+            this.FoldBtn.Location = new System.Drawing.Point(100, 64);
+            this.FoldBtn.Name = "FoldBtn";
+            this.FoldBtn.Size = new System.Drawing.Size(75, 23);
+            this.FoldBtn.TabIndex = 12;
+            this.FoldBtn.Text = "Fold";
+            this.FoldBtn.UseVisualStyleBackColor = true;
+            this.FoldBtn.Click += new System.EventHandler(this.FoldBtn_Click);
+            // 
+            // BidBtn
+            // 
+            this.BidBtn.Location = new System.Drawing.Point(100, 35);
+            this.BidBtn.Name = "BidBtn";
+            this.BidBtn.Size = new System.Drawing.Size(75, 23);
+            this.BidBtn.TabIndex = 13;
+            this.BidBtn.Text = "Bid";
+            this.BidBtn.UseVisualStyleBackColor = true;
+            this.BidBtn.Click += new System.EventHandler(this.BidBtn_Click);
+            // 
+            // BidValue
+            // 
+            this.BidValue.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.BidValue.Location = new System.Drawing.Point(30, 38);
+            this.BidValue.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.BidValue.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.BidValue.Name = "BidValue";
+            this.BidValue.Size = new System.Drawing.Size(64, 20);
+            this.BidValue.TabIndex = 14;
+            this.BidValue.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // grpActions
+            // 
+            this.grpActions.Controls.Add(this.BidBtn);
+            this.grpActions.Controls.Add(this.BidValue);
+            this.grpActions.Controls.Add(this.All_inBtn);
+            this.grpActions.Controls.Add(this.CheckBtn);
+            this.grpActions.Controls.Add(this.FoldBtn);
+            this.grpActions.Enabled = false;
+            this.grpActions.Location = new System.Drawing.Point(493, 375);
+            this.grpActions.Name = "grpActions";
+            this.grpActions.Size = new System.Drawing.Size(200, 163);
+            this.grpActions.TabIndex = 15;
+            this.grpActions.TabStop = false;
+            this.grpActions.Text = "Actions";
+            // 
             // GameRoom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(967, 581);
+            this.Controls.Add(this.grpActions);
             this.Controls.Add(this.StartBtn);
             this.Controls.Add(this.SitBtn);
             this.Controls.Add(this.ucPlayerMain);
@@ -139,6 +230,8 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "GameRoom";
             this.Text = "GameRoom";
+            ((System.ComponentModel.ISupportInitialize)(this.BidValue)).EndInit();
+            this.grpActions.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,5 +249,11 @@
         private Controls.ucPlayer ucPlayerMain;
         private System.Windows.Forms.Button SitBtn;
         private System.Windows.Forms.Button StartBtn;
+        private System.Windows.Forms.Button All_inBtn;
+        private System.Windows.Forms.Button CheckBtn;
+        private System.Windows.Forms.Button FoldBtn;
+        private System.Windows.Forms.Button BidBtn;
+        private System.Windows.Forms.NumericUpDown BidValue;
+        private System.Windows.Forms.GroupBox grpActions;
     }
 }

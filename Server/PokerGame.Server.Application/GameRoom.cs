@@ -54,14 +54,28 @@ namespace PokerGame.Server.Application
                             _gameEngine.StartGame();
                             //now the hands are dealt and deck is shuffled.
                             //we send the hand information to client
-                            var hands = string.Join("*",_gameEngine.Hands.Select(x => $"{x.Key.Id}%{string.Join(";", x.Value.Select(y => $"{(int)y.Suit},{(int)y.Value}"))}"));
+                            var hands = string.Join("*",_gameEngine.Players.Select(x => $"{x.ClientId}%{string.Join(";", x.Hand.Select(y => $"{(int)y.Suit},{(int)y.Value}"))}"));
                             SendMessage(new Message(eCommand.startGame, Id, null, hands));
+                            SendMessage(new Message(eCommand.bid, Id, null, string.Join(",", $"{_gameEngine.Players.Select(x => $"{x.ClientId}%{x.Bid.bid}")}")));
+                            SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
                         }
                     }
                     else
                     {
                         SendMessage(new Message(eCommand.txt, Id, null, $"Awaiting players: {startVotes}/{_playingClients.Count}"));
                     }
+                    break;
+                case eCommand.bid:
+                    _gameEngine.AddBid(message.ClientId.Value, int.Parse(message.Body));
+                    _gameEngine.NextTurn();
+                    SendMessage(new Message(eCommand.bid, Id, null, string.Join(",", $"{_gameEngine.Players.Select(x => $"{x.ClientId}%{x.Bid.bid}")}")));
+                    SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
+                    break;
+                case eCommand.fold:
+                    break;
+                case eCommand.check:
+                    break;
+                case eCommand.allIn:
                     break;
                 default:
                     break;

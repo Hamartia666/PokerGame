@@ -33,6 +33,8 @@
             this.cash_value = new System.Windows.Forms.Label();
             this.ucCard2 = new PokerGame.Client.Forms.Controls.ucCard();
             this.ucCard1 = new PokerGame.Client.Forms.Controls.ucCard();
+            this.Bid_label = new System.Windows.Forms.Label();
+            this.Bid_value = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // playerName
@@ -78,10 +80,30 @@
             this.ucCard1.Size = new System.Drawing.Size(84, 107);
             this.ucCard1.TabIndex = 3;
             // 
+            // Bid_label
+            // 
+            this.Bid_label.AutoSize = true;
+            this.Bid_label.Location = new System.Drawing.Point(83, 30);
+            this.Bid_label.Name = "Bid_label";
+            this.Bid_label.Size = new System.Drawing.Size(34, 13);
+            this.Bid_label.TabIndex = 5;
+            this.Bid_label.Text = "Bid: $";
+            // 
+            // Bid_value
+            // 
+            this.Bid_value.AutoSize = true;
+            this.Bid_value.Location = new System.Drawing.Point(132, 30);
+            this.Bid_value.Name = "Bid_value";
+            this.Bid_value.Size = new System.Drawing.Size(13, 13);
+            this.Bid_value.TabIndex = 6;
+            this.Bid_value.Text = "0";
+            // 
             // ucPlayer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.Bid_value);
+            this.Controls.Add(this.Bid_label);
             this.Controls.Add(this.ucCard2);
             this.Controls.Add(this.ucCard1);
             this.Controls.Add(this.cash_value);
@@ -101,5 +123,7 @@
         private System.Windows.Forms.Label cash_value;
         private ucCard ucCard1;
         private ucCard ucCard2;
+        private System.Windows.Forms.Label Bid_label;
+        private System.Windows.Forms.Label Bid_value;
     }
 }
