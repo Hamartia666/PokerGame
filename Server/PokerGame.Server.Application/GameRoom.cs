@@ -67,17 +67,64 @@ namespace PokerGame.Server.Application
                     break;
                 case eCommand.bid:
                     _gameEngine.AddBid(message.ClientId.Value, int.Parse(message.Body));
-                    _gameEngine.NextTurn();
                     SendMessage(new Message(eCommand.bid, Id, null, string.Join(",", $"{_gameEngine.Players.Select(x => $"{x.ClientId}%{x.Bid.bid}")}")));
-                    SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
+                    if (_gameEngine.UpdateGameState())
+                    {
+                        GameStateChanged();
+                    }
+                    else
+                        SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
                     break;
                 case eCommand.fold:
+                    _gameEngine.Fold(message.ClientId.Value);
+                    if (_gameEngine.UpdateGameState())
+                    {
+                        GameStateChanged();
+                    }
+                    else
+                        SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
                     break;
                 case eCommand.check:
+                    _gameEngine.NextTurn();
+                    if (_gameEngine.UpdateGameState())
+                    {
+                        GameStateChanged();
+                    }
+                    else
+                        SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
                     break;
                 case eCommand.allIn:
+                    _gameEngine.AllIn(message.ClientId.Value, int.Parse(message.Body));
+                    SendMessage(new Message(eCommand.bid, Id, null, string.Join(",", $"{_gameEngine.Players.Select(x => $"{x.ClientId}%{x.Bid.bid}")}")));
+                    if (_gameEngine.UpdateGameState())
+                    {
+                        GameStateChanged();
+                    }
+                    else
+                    {
+                        SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
+                    }
                     break;
                 default:
+                    break;
+            }
+        }
+
+        private void GameStateChanged()
+        {
+            switch (_gameEngine.gameState)
+            {
+                case eGameState.flop:
+                case eGameState.turn:
+                case eGameState.river:
+                    SendMessage(new Message(eCommand.tableCards, Id, null, $"{string.Join(";", _gameEngine.Table.Select(y => $"{(int)y.Suit},{(int)y.Value}"))}"));
+                    SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
+                    break;
+                case eGameState.showdown:
+                    SendMessage(new Message(eCommand.txt, Id, null, "SHOWDOWN"));
+                    break;
+                case eGameState.finish:
+                    SendMessage(new Message(eCommand.txt, Id, null, "FINISH"));
                     break;
             }
         }

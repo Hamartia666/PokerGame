@@ -13,6 +13,8 @@ namespace PokerGame.Common
         public Bid Bid { get; set; }
         public bool HasTurn { get; set; }
         public bool HasFolded { get; set; }
+        public bool IsAllIn { get; set; }
+        public bool IsDealer { get; set; }
 
         public Player(Guid id)
         {

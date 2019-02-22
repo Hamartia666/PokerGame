@@ -12,21 +12,21 @@ namespace PokerGame.Server.Game
     {
         //deck
         private List<Card> _deck;
-        //private Dictionary<Client, Bid> _bids = new Dictionary<Client, Bid>();
         public List<Card> Table { get; } = new List<Card>();
-        //public Dictionary<Client, List<Card>> Hands { get; } = new Dictionary<Client, List<Card>>();
         private int _poll;
-
+        public eGameState gameState;
         public List<Player> Players { get; } = new List<Player>();
+        private List<Player> _playersLeft;
+        private RoundCounter _roundCounter;
 
         public GameEngine()
         {
-            InitializeDeck();
+            _deck = new List<Card>();
         }
 
         private void InitializeDeck()
         {
-            _deck = new List<Card>();
+            _deck.Clear();
             foreach (eSuit s in Enum.GetValues(typeof(eSuit)))
             {
                 foreach (eValue v in Enum.GetValues(typeof(eValue)))
@@ -57,44 +57,61 @@ namespace PokerGame.Server.Game
 
         public void StartGame()
         {
+            _roundCounter = new RoundCounter(Players.Count);
+            InitializeDeck();
             Shuffle();
             DealHands();
-            SetBlinds();            
+            SetBlinds();
+            InitializeTurn();
         }
 
         private void SetBlinds()
         {
-            if (Players.Where(x => x.Bid.Blind != eBlind.no).Any())
+            if (Players.All(x => !x.IsDealer))
             {
                 var rnd = new Random();
                 var c = rnd.Next(Players.Count);
-                Players[c++].Bid.Blind = eBlind.big;
-                Players[c++%Players.Count].Bid.Blind = eBlind.small;
-                InitializeTurn(c % Players.Count);
-            }
-            else
-            {
-                var index = Players.IndexOf(Players.First(x => x.Bid.Blind == eBlind.big));
-                Players[index++].Bid.Blind = eBlind.no;
-                Players[index++ % Players.Count].Bid.Blind = eBlind.big;
-                Players[index++ % Players.Count].Bid.Blind = eBlind.small;
-                InitializeTurn(index % Players.Count);
-            }
-            
+                Players[c].IsDealer = true;
+            }            
+            var index = Players.IndexOf(Players.First(x => x.IsDealer == true));
+            Players[index++].IsDealer = false;
+            Players[index % Players.Count].IsDealer = true;
+            Players[index++ % Players.Count].Bid.Blind = eBlind.no;
+            Players[index++ % Players.Count].Bid.Blind = eBlind.small;
+            Players[index % Players.Count].Bid.Blind = eBlind.big;            
         }
 
-        private void InitializeTurn(int index)
+        private void InitializeTurn()
         {
-            Players[index].HasTurn = true;
+            _roundCounter.ResetCounter();
+            Players.Select(x => x.HasTurn = false);
+            switch (gameState)
+            {
+                case eGameState.preFlop:
+                    var index = Players.IndexOf(Players.First(x => x.Bid.Blind == eBlind.big));
+                    Players[index + 1].HasTurn = true;
+                    _playersLeft = Players;
+                    break;
+                case eGameState.flop:
+                case eGameState.turn:
+                case eGameState.river:
+                    var i = _playersLeft.IndexOf(_playersLeft.First(x => x.IsDealer));
+                    _playersLeft[i + 1].HasTurn = true;
+                    break;
+                case eGameState.showdown:
+                    break;
+            }
         }
 
         public void NextTurn()
-        {     
-            //what if player is all in
-            var playersLeft = Players.Where(x => !x.HasFolded).ToList();
-            var index = playersLeft.IndexOf(playersLeft.First(x => x.HasTurn));
-            playersLeft[index++ % playersLeft.Count].HasTurn = false;
-            playersLeft[index % playersLeft.Count].HasTurn = true;
+        {
+            //turn counter or sth and if
+            _roundCounter.CountOne();
+            var index = _playersLeft.IndexOf(_playersLeft.First(x => x.HasTurn));
+            _playersLeft[index++ % _playersLeft.Count].HasTurn = false;
+            _playersLeft[index % _playersLeft.Count].HasTurn = true;
+            _playersLeft = Players.Where(x => !x.HasFolded && !x.IsAllIn).ToList();
+            _roundCounter.UpdatePlayers(_playersLeft.Count);
         }
 
         private void DealHands()
@@ -108,8 +125,15 @@ namespace PokerGame.Server.Game
             }           
         }
 
+        public void Fold(Guid clientId)
+        {
+            Players.First(x => x.ClientId == clientId).HasFolded = true;
+            NextTurn();
+        }
+
         private void Flop()
         {
+            PopCard();
             for (var i = 0; i < 3; i++)
             {
                 Table.Add(PopCard());
@@ -118,7 +142,14 @@ namespace PokerGame.Server.Game
 
         private void Turn_River()
         {
+            PopCard();
             Table.Add(PopCard());
+        }
+
+        public void AllIn(Guid Id, int bid)
+        {
+            Players.First(x => x.ClientId == Id).IsAllIn = true;
+            AddBid(Id, bid);
         }
 
         private Card PopCard()
@@ -137,6 +168,64 @@ namespace PokerGame.Server.Game
         public void AddBid(Guid Id, int bid)
         {
             Players.First(x => x.ClientId == Id).Bid.bid += bid;
+            NextTurn();
+        }
+
+        public bool UpdateGameState()
+        {
+            if (_playersLeft.Count == 1)
+            {
+                if (Players.Where(x => x.IsAllIn).Any())
+                {
+                    SumBids();
+                    Flop();
+                    Turn_River();
+                    Turn_River();
+                    gameState = eGameState.showdown;
+                    ShowDown();
+                    return true;
+                }
+                else
+                {
+                    SumBids();
+                    gameState = eGameState.finish;
+                    ShowDown();
+                    return true;
+                }
+            }
+            else if (_playersLeft.All(x=>x.Bid.bid == Players.Max(y=>y.Bid.bid)) && _roundCounter.RoundFinished)
+            {
+                SumBids();
+                switch (gameState)
+                {
+                    case eGameState.preFlop:
+                        gameState = eGameState.flop;
+                        Flop();
+                        break;
+                    case eGameState.flop:
+                        gameState = eGameState.turn;
+                        Turn_River();
+                        break;
+                    case eGameState.turn:
+                        gameState = eGameState.river;
+                        Turn_River();
+                        break;
+                    case eGameState.river:
+                        gameState = eGameState.showdown;
+                        ShowDown();
+                        break;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void ShowDown()
+        {
+            throw new NotImplementedException();
         }
 
         //evaluation who won

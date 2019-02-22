@@ -24,5 +24,6 @@ namespace PokerGame.Common
         allIn,
         check,
         showCards,
+        tableCards,
     }
 }
