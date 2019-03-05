@@ -15,6 +15,7 @@ namespace PokerGame.Common
         public bool HasFolded { get; set; }
         public bool IsAllIn { get; set; }
         public bool IsDealer { get; set; }
+        public HandRank HandRank { get; set; }
 
         public Player(Guid id)
         {

@@ -44,9 +44,11 @@
     <Compile Include="Bid.cs" />
     <Compile Include="Card.cs" />
     <Compile Include="eBlind.cs" />
+    <Compile Include="eCardRank.cs" />
     <Compile Include="eValue.cs" />
     <Compile Include="eCommand.cs" />
     <Compile Include="eSuit.cs" />
+    <Compile Include="HandRank.cs" />
     <Compile Include="IMessage.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageEventArgs.cs" />

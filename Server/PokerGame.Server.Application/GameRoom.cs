@@ -122,6 +122,7 @@ namespace PokerGame.Server.Application
                     break;
                 case eGameState.showdown:
                     SendMessage(new Message(eCommand.txt, Id, null, "SHOWDOWN"));
+                    //
                     break;
                 case eGameState.finish:
                     SendMessage(new Message(eCommand.txt, Id, null, "FINISH"));

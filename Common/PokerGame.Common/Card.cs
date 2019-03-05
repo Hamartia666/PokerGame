@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PokerGame.Common
 { 
-    public class Card
+    public class Card : IComparable<Card>
     {
         public eSuit Suit { get; set; }
         public eValue Value { get; set; }
@@ -14,6 +14,16 @@ namespace PokerGame.Common
         {
             Suit = s;
             Value = v;
+        }
+
+        public int CompareTo(Card that)
+        {
+            if (Value < that.Value) return -1;
+            if (Value == that.Value)
+            {
+                if (Suit < that.Suit) return -1;
+            }
+            return 1;
         }
     }
 }
