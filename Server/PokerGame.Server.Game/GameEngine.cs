@@ -19,35 +19,36 @@ namespace PokerGame.Server.Game
         private List<Player> _playersLeft;
         private RoundCounter _roundCounter;
         public Guid winner;
+        public Dictionary<Player, double> WinProbabilites;
 
         public GameEngine()
         {
             _deck = new List<Card>();
         }
 
-        private void InitializeDeck()
+        private void InitializeDeck(List<Card> deck)
         {
-            _deck.Clear();
+            deck.Clear();
             foreach (eSuit s in Enum.GetValues(typeof(eSuit)))
             {
                 foreach (eValue v in Enum.GetValues(typeof(eValue)))
                 {
-                    _deck.Add(new Card(s, v));
+                    deck.Add(new Card(s, v));
                 }
             }
         }
 
-        private void Shuffle()
+        private void Shuffle(List<Card> deck)
         {
             var rng = new Random();
-            var n = _deck.Count;
+            var n = deck.Count;
             while (n > 1)
             {
                 n--;
                 var k = rng.Next(n + 1);
-                var value = _deck[k];
-                _deck[k] = _deck[n];
-                _deck[n] = value;
+                var value = deck[k];
+                deck[k] = deck[n];
+                deck[n] = value;
             }
         }
 
@@ -59,8 +60,8 @@ namespace PokerGame.Server.Game
         public void StartGame()
         {
             _roundCounter = new RoundCounter(Players.Count);
-            InitializeDeck();
-            Shuffle();
+            InitializeDeck(_deck);
+            Shuffle(_deck);
             DealHands();
             SetBlinds();
             InitializeTurn();
@@ -234,13 +235,13 @@ namespace PokerGame.Server.Game
             winner = bestPlaya.ClientId;
         }
 
-        private HandRank GetBestHandRank(List<Card> hand, List<Card> table)
+        private HandRank GetBestHandRank(IEnumerable<Card> hand, IEnumerable<Card> table)
         {
             var possibleHands = GetPossibleHands(hand, table);
             return EvaluateHands(possibleHands);
         }
 
-        private HandRank EvaluateHands(List<List<Card>> possibleHands)
+        private HandRank EvaluateHands(IEnumerable<IEnumerable<Card>> possibleHands)
         {
             var rankList = new List<HandRank>();
             foreach (var hand in possibleHands)
@@ -250,7 +251,7 @@ namespace PokerGame.Server.Game
             return rankList.Max();
         }
 
-        private List<List<Card>> GetPossibleHands(List<Card> hand, List<Card> table)
+        private IEnumerable<IEnumerable<Card>> GetPossibleHands(IEnumerable<Card> hand, IEnumerable<Card> table)
         {
             var retList = new List<List<Card>>();
             var handArray = new int[2] { 0, 1 };
@@ -261,20 +262,20 @@ namespace PokerGame.Server.Game
                 var possibleTablecombinations = GetKCombs<int>(tableArray, 5 - chosenHandCard.Length);
                 foreach (var tableComb in possibleTablecombinations)
                 {
-                    retList.Add(GetHandAndTableCards(hand, table, chosenHandCard, tableComb));
+                    retList.Add(GetHandAndTableCards(hand, table, chosenHandCard, tableComb).ToList());
                 }
             }
             return retList;
         }
 
-        private List<Card> GetHandAndTableCards(List<Card> hand, List<Card> table, int[] chosenHandCard, IEnumerable<int> tableComb)
+        private IEnumerable<Card> GetHandAndTableCards(IEnumerable<Card> hand, IEnumerable<Card> table, int[] chosenHandCard, IEnumerable<int> tableComb)
         {
             var retList = new List<Card>();
             //take hand
             foreach (var handCard in chosenHandCard)
-                retList.Add(hand[handCard]);
+                retList.Add(hand.ToList()[handCard]);
             foreach (var tableCard in tableComb)
-                retList.Add(table[tableCard]);
+                retList.Add(table.ToList()[tableCard]);
             return retList;
         }
 
@@ -288,26 +289,44 @@ namespace PokerGame.Server.Game
 
         
 
-        private List<Card> PossibleTables() //P3
+        private IEnumerable<IEnumerable<Card>> PossibleTables() //P3
         {
-            throw new NotImplementedException();
+            int tableMax = 5;
+            var remainingCardCombinations = GetKCombs(_deck, tableMax - Table.Count);
+            foreach (var possibleTable in remainingCardCombinations)
+                possibleTable.ToList().AddRange(Table);
+            return remainingCardCombinations;
         }
 
-        private List<Card> PossibleOpponents() //P3.2
+        private IEnumerable<IEnumerable<Card>> PossibleOpponentHands(Player player, IEnumerable<Card> table) //P3.2
         {
-            throw new NotImplementedException();
+            var deck = new List<Card>();
+            InitializeDeck(deck);
+            //remove player cards
+            foreach (var card in player.Hand)
+                deck.Remove(card);
+
+            //remove table cards
+            foreach (var card in table)
+                deck.Remove(card);
+            //get kcoombs from deck, 2 cards
+            return GetKCombs(deck, 2);
         }
 
-        private void WinProbability(Player player) //P4
+        private double WinProbability(Player player) //P4
         {
-
+            int wins = 0;
+            int cases = 0;
+            foreach (var table in PossibleTables())
+            {
+                var playerHandRank = GetBestHandRank(player.Hand, table);
+                foreach (var opponent in PossibleOpponentHands(player, table))
+                {
+                    cases++;
+                    wins += playerHandRank.CompareTo(GetBestHandRank(opponent.ToList(), table.ToList())) > 0 ? 1 : 0;
+                }
+            }
+            return wins / cases;
         }
-
-
-        //evaluation who won
-
-
-
-
     }
 }

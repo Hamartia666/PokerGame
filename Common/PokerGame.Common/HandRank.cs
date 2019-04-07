@@ -28,9 +28,9 @@ namespace PokerGame.Common
             return 1;
         }
 
-        public static HandRank GetHandRank(List<Card> cards)
+        public static HandRank GetHandRank(IEnumerable<Card> cards)
         {
-            return new HandRank() { HighCard = cards.Max(), CardRank = GetRank(cards) };
+            return new HandRank() { HighCard = cards.Max(), CardRank = GetRank(cards.ToList()) };
         }
 
         private static eCardRank GetRank(List<Card> cards)
@@ -89,5 +89,6 @@ namespace PokerGame.Common
 
             return eCardRank.highCard;
         }
+
     }
 }
