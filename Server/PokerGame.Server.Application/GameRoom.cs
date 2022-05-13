@@ -56,7 +56,7 @@ namespace PokerGame.Server.Application
                             //we send the hand information to client
                             var hands = string.Join("*",_gameEngine.Players.Select(x => $"{x.ClientId}%{string.Join(";", x.Hand.Select(y => $"{(int)y.Suit},{(int)y.Value}"))}"));
                             SendMessage(new Message(eCommand.startGame, Id, null, hands));
-                            SendMessage(new Message(eCommand.bid, Id, null, string.Join(",", $"{_gameEngine.Players.Select(x => $"{x.ClientId}%{x.Bid.bid}")}")));
+                            SendMessage(new Message(eCommand.bid, Id, null, string.Join(",", _gameEngine.Players.Select(x => $"{x.ClientId}%{x.Bid.bid}"))));
                             SendMessage(new Message(eCommand.turn, Id, _gameEngine.Players.First(x => x.HasTurn).ClientId, ""));
                         }
                     }
