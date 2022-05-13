@@ -91,7 +91,7 @@ namespace PokerGame.Server.Game
             {
                 case eGameState.preFlop:
                     var index = Players.IndexOf(Players.First(x => x.Bid.Blind == eBlind.big));
-                    Players[index + 1].HasTurn = true;
+                    Players[(index + 1) % Players.Count].HasTurn = true;
                     _playersLeft = Players;
                     break;
                 case eGameState.flop:
