@@ -70,11 +70,15 @@ namespace PokerGame.Client.Forms
 
         private void TakeTurn()
         {
-            grpActions.Enabled = true;
-            if (_ucPlayers.First(x => x._clientId == ClientId).Bid != _ucPlayers.Max(x => x.Bid))
+            MethodInvoker invoker = new MethodInvoker(delegate
             {
-                CheckBtn.Enabled = false;
-            }
+                grpActions.Enabled = true;
+                if (_ucPlayers.First(x => x._clientId == ClientId).Bid != _ucPlayers.Max(x => x.Bid))
+                {
+                    CheckBtn.Enabled = false;
+                }
+            });
+            this.Invoke(invoker);
         }
 
         private void ProcessBids(string body)
